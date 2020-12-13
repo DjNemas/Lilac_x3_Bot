@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lilac_x3_Bot", "Lilac_x3_Bot\Lilac_x3_Bot.csproj", "{382F50C3-D257-40B4-9DDC-93B74EAF4B86}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{382F50C3-D257-40B4-9DDC-93B74EAF4B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{382F50C3-D257-40B4-9DDC-93B74EAF4B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{382F50C3-D257-40B4-9DDC-93B74EAF4B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{382F50C3-D257-40B4-9DDC-93B74EAF4B86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D0C65BA-4AC6-4618-9640-D36F2FAD40FF}
+	EndGlobalSection
+EndGlobal
