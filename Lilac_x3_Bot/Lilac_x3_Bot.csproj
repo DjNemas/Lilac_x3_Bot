@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ConfigXML.cs~RF5115445.TMP" />
     <None Remove="Program.cs~RF468b3ef.TMP" />
   </ItemGroup>
 
