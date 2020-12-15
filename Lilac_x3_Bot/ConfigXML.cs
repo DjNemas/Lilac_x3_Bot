@@ -59,16 +59,16 @@ namespace Lilac_x3_Bot
 
         public string GetToken(XDocument configFile)
         {
-            var token = from config in configFile.Descendants("Init")
+            var tokenQuery = from config in configFile.Descendants("Init")
                         select config;
             try
             {
-                string tmp = "";
-                foreach (var item in token)
+                string token = "";
+                foreach (var item in tokenQuery)
                 {
-                    tmp = item.Element("Token").Value;
+                    token = item.Element("Token").Value;
                 }
-                return tmp;
+                return token;
             }
             catch (Exception)
             {

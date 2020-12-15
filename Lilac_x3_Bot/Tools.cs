@@ -6,6 +6,7 @@ namespace Lilac_x3_Bot
 {
     public class Tools
     {
+        public string test;
         public void CWLTextColor(string text, ConsoleColor textColor)
         {
             Console.ForegroundColor = textColor;
