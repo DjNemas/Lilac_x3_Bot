@@ -40,8 +40,14 @@ namespace Lilac_x3_Bot
             try
             {
                 XDocument config = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
-                                                    new XElement("Init",
-                                                        new XElement("Token", "Token Here")
+                                                    new XElement("Config",
+                                                        new XElement("Init",
+                                                            new XElement("Token", "Token Here")
+                                                        ), 
+                                                        new XElement("UserChoice",
+                                                            new XElement("Prefix", "!"),
+                                                            new XElement("WriteChannel", new XAttribute("id", ""))
+                                                        )
                                                     )
                                                 );
                 config.Save(configPath);
@@ -60,7 +66,7 @@ namespace Lilac_x3_Bot
         public string GetToken(XDocument configFile)
         {
             var tokenQuery = from config in configFile.Descendants("Init")
-                        select config;
+                             select config;
             try
             {
                 string token = "";
