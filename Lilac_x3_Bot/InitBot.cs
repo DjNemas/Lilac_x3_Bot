@@ -13,6 +13,8 @@ namespace Lilac_x3_Bot
 {
     class InitBot
     {
+        // DevMode Member
+        bool _devMode = false;
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -45,7 +47,7 @@ namespace Lilac_x3_Bot
             CommandHandlingService _cmdHandService = new CommandHandlingService(_client, _commands, configXML);
 
             // Add Own Features
-            ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService);
+            ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService, _devMode);
 
             // New ServiceCollection
             this._services = new ServiceCollection()

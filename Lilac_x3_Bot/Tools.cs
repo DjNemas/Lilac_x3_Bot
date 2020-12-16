@@ -13,5 +13,21 @@ namespace Lilac_x3_Bot
             Console.WriteLine(text);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        public string RemoveSpecificCharFromString(string yourString, char character)
+        {
+            string newString = "";
+            for (int i = 0; i < yourString.Length; i++)
+            {
+                if (yourString[i] == character)
+                {
+                    continue;
+                }
+                else
+                {
+                    newString += yourString[i];
+                }
+            }
+            return newString;
+        }
     }
 }
