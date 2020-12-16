@@ -13,6 +13,8 @@ namespace Lilac_x3_Bot
 {
     class InitBot
     {
+        // DevMode Member
+        bool _devMode = false;
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -45,7 +47,7 @@ namespace Lilac_x3_Bot
             CommandHandlingService _cmdHandService = new CommandHandlingService(_client, _commands, configXML);
 
             // Add Own Features
-            ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService);
+            ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService, _devMode);
 
             // New ServiceCollection
             this._services = new ServiceCollection()
@@ -60,6 +62,7 @@ namespace Lilac_x3_Bot
             await _cmdHandService.InitializeAsync(_services);
 
             this._client.Log += Log;
+            this._client.UserJoined += UserJoined;
 
             if (this.configXML != null)
             {
@@ -72,6 +75,17 @@ namespace Lilac_x3_Bot
             await _client.StartAsync();
             // Block this task until the program is closed.
             await Task.Delay(-1);
+        }
+
+        private Task UserJoined(SocketGuildUser user)
+        {
+            t.CWLTextColor("User: " + user.Username + "Joined the Guild.", ConsoleColor.Yellow);
+            Task.Run(async () =>
+            {
+                await _client.DownloadUsersAsync(_client.Guilds);
+            });           
+            t.CWLTextColor("All Users downloaded", ConsoleColor.Yellow);
+            return Task.CompletedTask;
         }
 
         private Task Log(LogMessage msg)
