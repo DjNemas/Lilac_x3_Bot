@@ -14,24 +14,30 @@ namespace Lilac_x3_Bot.Service
         private readonly DiscordSocketClient _client;
         private readonly CommandService _commands;
         private IServiceProvider _service;
-        private bool devMode = true;
-        private char prefix = ' ';
+        private bool _devMode;
+        private char _prefix = ' ';
 
-        public CommandHandlingService(DiscordSocketClient client, CommandService commands, XDocument configXML)
+        public CommandHandlingService(DiscordSocketClient client, CommandService commands, XDocument configXML, bool devMode)
         {
             this._client = client;
             this._commands = commands;
+            this._devMode = devMode;
 
-            var prefixQuery = from pre in configXML.Descendants("UserChoice")
+            var prefixQuery = from pre in configXML.Descendants("General")
                             select pre;
 
             foreach (var item in prefixQuery)
             {
-                this.prefix = item.Element("Prefix").Value[0];
+                this._prefix = item.Element("Prefix").Value[0];
             }
 
 
             this._client.MessageReceived += MessageReceived;
+        }
+
+        public char GetPrefix()
+        {
+            return this._prefix;
         }
 
         public async Task InitializeAsync(IServiceProvider service)
@@ -47,14 +53,15 @@ namespace Lilac_x3_Bot.Service
             if (!(rawMessage is SocketUserMessage message)) return;
             if (message.Source != MessageSource.User) return;
 
+            Console.WriteLine("Prefix: " + this._prefix);
             int argPos = 0;
-            if (!message.HasCharPrefix(this.prefix, ref argPos)) return;
+            if (!message.HasCharPrefix(this._prefix, ref argPos)) return;
 
             var context = new SocketCommandContext(_client, message);
             var result = await this._commands.ExecuteAsync(context, argPos, _service);
 
             if (result.Error.HasValue &&
-                result.Error.Value != CommandError.UnknownCommand && devMode == true)
+                result.Error.Value != CommandError.UnknownCommand && _devMode)
                 await context.Channel.SendMessageAsync(result.ToString());
         }
 
