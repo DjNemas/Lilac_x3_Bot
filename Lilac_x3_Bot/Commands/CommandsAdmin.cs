@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
@@ -12,6 +13,7 @@ namespace Lilac_x3_Bot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task PrefixAsyc([Remainder] string args = null)
         {
+
             if (args != null)
             {
                 string[] countArgs = args.Split(' ');
@@ -33,15 +35,25 @@ namespace Lilac_x3_Bot.Commands
                     await RestartBot();
                 }
             }
+            else
+            {
+                await SendToGeneralChannelAsync("Du hast zu wenig Argumente angebene. Bitte nutze den Befehl wie folgt: `!prefix <prefix>`");
+            }
         }
 
         [Command("shutdown")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task ShutdownAsyc([Remainder] string args = null)
+        public async Task ShutdownAsyc()
         {
             await SendTo1337ChannelAsync("Ich verabschiede mich mal o/");
             Environment.Exit(0);
+        }
+
+        [Command("restart")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task RestartAsyc()
+        {
+            await RestartBot();
         }
     }
 }

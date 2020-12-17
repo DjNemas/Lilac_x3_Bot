@@ -12,6 +12,7 @@ namespace Lilac_x3_Bot.Commands
         // Member
         private ConfigXML _configXML = new ConfigXML();
         private Tools t = new Tools();
+        private CommandHeader self;
         public static ulong Feature1337WriteIntoChannelID { get; set; }
         public static ulong Feature1337ReadFromChannelID { get; set; }
         public static ulong GenerelWriteIntoChannelID { get; set; }
@@ -19,6 +20,7 @@ namespace Lilac_x3_Bot.Commands
 
         public CommandHeader()
         {
+            //this.self = new CommandHeader();
             Feature1337WriteIntoChannelID = this._configXML.GetChannelUID("Feature1337","WriteIntoChannel");
             Feature1337ReadFromChannelID = this._configXML.GetChannelUID("Feature1337", "ReadFromChannel");
             GenerelWriteIntoChannelID = this._configXML.GetChannelUID("General", "WriteIntoChannel");
