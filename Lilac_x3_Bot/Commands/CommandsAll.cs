@@ -7,21 +7,25 @@ namespace Lilac_x3_Bot.Commands
 
     public class CommandsAll : CommandHeader
     {
-        //member
-        Tools t = new Tools();
 
-        [Command("test")]
-        [Summary("Write in Console.")]
-        public async Task TestAsync()
+        [Command("test1337")]
+        [RequireUserPermission(Discord.ChannelPermission.ManageChannels)]
+        public async Task Test13337Async()
         {
-            
-            
-            Console.WriteLine("Channel: " + Context.Channel + "\n");
-            Console.WriteLine("Client: " + Context.Client + "\n");
-            Console.WriteLine("Guild: " + Context.Guild + "\n");
-            Console.WriteLine("Message: " + Context.Message + "\n");
-            Console.WriteLine("User: " + Context.User + "\n");
+            bool check = ReadChannel1337();
+            if (!check) return;
 
+            await SendTo1337ChannelAsync("1337 klappt!");
+        }
+
+        [Command("testgeneral")]
+        [RequireUserPermission(Discord.ChannelPermission.ManageChannels)]
+        public async Task TestgeneralAsync()
+        {
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SendToGeneralChannelAsync("General klappt!");
         }
     }
 }

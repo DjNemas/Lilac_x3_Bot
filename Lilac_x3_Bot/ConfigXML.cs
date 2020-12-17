@@ -51,7 +51,8 @@ namespace Lilac_x3_Bot
                                                         ),
                                                         new XElement("Feature1337",
                                                             new XElement("WriteIntoChannel", new XAttribute("id", "0")),
-                                                            new XElement("ReadFromChannel", new XAttribute("id", "0"))
+                                                            new XElement("ReadFromChannel", new XAttribute("id", "0")),
+                                                            new XElement("Listen1337FromChannel", new XAttribute("id", "0"))
                                                         )
                                                      )
                                                 );
@@ -96,6 +97,18 @@ namespace Lilac_x3_Bot
             foreach (var item in prefixQuery)
             {
                 item.Element("Prefix").Value = prefix.ToString();
+            }
+            this._configXML.Save(this._configPath);
+        }
+
+        public void ChangeWriteIntoChannelID(ulong id, string modul, string moduleid)
+        {
+            this._configXML = LoadConfigXML();
+            var prefixQuery = from pre in this._configXML.Descendants(modul)
+                              select pre;
+            foreach (var item in prefixQuery)
+            {
+                item.Element(moduleid).Attribute("id").Value = id.ToString();
             }
             this._configXML.Save(this._configPath);
         }

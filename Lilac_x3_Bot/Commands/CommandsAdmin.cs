@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 namespace Lilac_x3_Bot.Commands
 {
     public class CommandsAdmin : CommandHeader
-    {
-
+    {        
         [Command("prefix")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task PrefixAsyc([Remainder] string args = null)
         {
+            bool check = ReadChannelGeneral();
+            if (!check) return;
 
             if (args != null)
             {
@@ -20,7 +21,7 @@ namespace Lilac_x3_Bot.Commands
 
                 if (countArgs.Length != 1)
                 {
-                    await SendToGeneralChannelAsync("Zu viele Agumente! Bitte `!prefix < prefix >` angeben.");
+                    await SendToGeneralChannelAsync("Zu viele Agumente! Bitte `"+ Prefix + "prefix < prefix >` angeben.");
 
                 }
                 else if (countArgs[0].Length > 1)
@@ -32,12 +33,12 @@ namespace Lilac_x3_Bot.Commands
                     ConfigXML config = new ConfigXML();
                     config.ChangePrefix(countArgs[0][0]);
                     await SendToGeneralChannelAsync("Der Prefix wurde zu `" + countArgs[0][0] + "` geändert!");
-                    await RestartBot();
+                    await SendToGeneralChannelAsync("> Info: Der Befehl brauch ein `" + Prefix + "restart`");
                 }
             }
             else
             {
-                await SendToGeneralChannelAsync("Du hast zu wenig Argumente angebene. Bitte nutze den Befehl wie folgt: `!prefix <prefix>`");
+                await SendToGeneralChannelAsync("Du hast zu wenig Argumente angebene. Bitte nutze den Befehl wie folgt: `" + Prefix + "prefix <prefix>`");
             }
         }
 
@@ -45,7 +46,10 @@ namespace Lilac_x3_Bot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task ShutdownAsyc()
         {
-            await SendTo1337ChannelAsync("Ich verabschiede mich mal o/");
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SendToGeneralChannelAsync("Ich verabschiede mich mal o/");
             Environment.Exit(0);
         }
 
@@ -53,7 +57,67 @@ namespace Lilac_x3_Bot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task RestartAsyc()
         {
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
             await RestartBot();
         }
+
+        [Command("setoutputchannelgeneral")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetOutputChannelGeneralAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SetOutputID(args, "setoutputchannelgeneral", "General", "WriteIntoChannel");
+        }
+
+        [Command("setoutputchannel1337")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetOutputChannel1337Async([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SetOutputID(args, "setoutputchannel1337", "Feature1337", "WriteIntoChannel");
+        }
+
+        [Command("setinputchannelgeneral")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetInputChannelGeneralAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SetOutputID(args, "setinputchannelgeneral", "General", "ReadFromChannel");
+        }
+
+        [Command("setinputchannel1337commands")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetInputChannel1337ReadAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+
+            await SetOutputID(args, "setinputchannel1337commands", "Feature1337", "ReadFromChannel");
+        }
+
+
+        [Command("setinputchannel1337listen")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetInputChannel1337ListenAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = ReadChannelGeneral();
+            if (!check) return;
+            await SetOutputID(args, "setinputchannel1337read", "Feature1337", "Listen1337FromChannel");
+        }
+
+
     }
 }

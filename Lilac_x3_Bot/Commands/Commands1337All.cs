@@ -2,8 +2,8 @@
 
 namespace Lilac_x3_Bot.Commands
 {
-    class Commands1337All : CommandHeader
+    public class Commands1337All : CommandHeader
     {
-
+        
     }
 }

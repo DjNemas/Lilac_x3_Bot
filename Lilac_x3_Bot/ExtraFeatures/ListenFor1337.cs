@@ -41,6 +41,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
             if (message.Source != MessageSource.User) return;
 
             var context = new SocketCommandContext(this._client, message);
+            bool check = _c.ReadChannel1337Listen(context);
+            if (!check) return;
 
             // Get Time to Check if we are on right time and prepare the string for it
             string timeNowAsString = DateTime.Now.ToLongTimeString();
@@ -54,7 +56,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
             if (!(timeBeginAsInt <= timeNowAsInt && timeEndAsInt > timeNowAsInt))
             {
                 if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                    " Nicht in der richtigen Zeit!");
+                    " Nicht in der richtigen Zeit!", context);
                 return;
             }
 
@@ -119,7 +121,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     dbTable.Table1337.InsertOnSubmit(addNewUser);
                     dbTable.SubmitChanges();
                     if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                        " Hab dich gezählt :P");
+                        " Hab dich gezählt :P", context);
                 }
                 else // Update user if allready exist
                 {
@@ -172,12 +174,12 @@ namespace Lilac_x3_Bot.ExtraFeatures
                         // send data to database when SubmitChanges() is called.
                         dbTable.SubmitChanges();
                         await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                            " Hab dich gezählt :P");
+                            " Hab dich gezählt :P", context);
                     }
                     else
                     {
                         if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                            " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649>");
+                            " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649>", context);
                     }
 
                 }

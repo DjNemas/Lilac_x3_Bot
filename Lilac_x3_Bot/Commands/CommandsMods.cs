@@ -9,11 +9,12 @@ namespace Lilac_x3_Bot.Commands
 {
     public class CommandsMods : CommandHeader
     {
-        [Command("meow")]
-        [RequireUserPermission(ChannelPermission.ManageChannels)]
-        public async Task MeowAsync()
-        {
-            await SendToGeneralChannelAsync("Jep Klappt");
-        }
+        //EXAMPLE for me
+        //[Command("meow")]
+        //[RequireUserPermission(ChannelPermission.ManageChannels)]
+        //public async Task MeowAsync()
+        //{
+        //    await SendToGeneralChannelAsync("Jep Klappt");
+        //}
     }
 }
