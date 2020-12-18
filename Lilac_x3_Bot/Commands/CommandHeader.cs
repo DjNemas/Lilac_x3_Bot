@@ -1,7 +1,9 @@
 ﻿using Discord.Commands;
+using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.Service;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +14,8 @@ namespace Lilac_x3_Bot.Commands
     {
         // Member
         private ConfigXML _configXML = new ConfigXML();
-        private Tools t = new Tools();
+        public Tools t = new Tools();
+        public DatabaseInit dbClass = new DatabaseInit();
         public char Prefix;
         public static ulong Feature1337WriteIntoChannelID { get; set; }
         public static ulong Feature1337ReadFromChannelID { get; set; }
@@ -31,7 +34,6 @@ namespace Lilac_x3_Bot.Commands
             GenerelWriteIntoChannelID = this._configXML.GetChannelUID("General", "WriteIntoChannel");
             GenerelReadFromChannelID = this._configXML.GetChannelUID("General", "ReadFromChannel");
             Listen1337FFromChannelID = this._configXML.GetChannelUID("Feature1337", "Listen1337FromChannel");
-
         }
 
         // For Listen on all General Commands

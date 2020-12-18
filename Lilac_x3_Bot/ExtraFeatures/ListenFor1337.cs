@@ -43,7 +43,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
             var context = new SocketCommandContext(this._client, message);
             bool check = _c.ReadChannel1337Listen(context);
             if (!check) return;
-
+            
             // Get Time to Check if we are on right time and prepare the string for it
             string timeNowAsString = DateTime.Now.ToLongTimeString();
             string timeBeginAsString = this.timeBegin.ToLongTimeString();
