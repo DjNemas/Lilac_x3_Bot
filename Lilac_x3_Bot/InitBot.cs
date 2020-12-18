@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Lilac_x3_Bot.Commands;
 using Lilac_x3_Bot.ExtraFeatures;
 using Lilac_x3_Bot.Service;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,19 +15,20 @@ namespace Lilac_x3_Bot
     class InitBot
     {
         // DevMode Member
-        bool _devMode = false;
+        public bool _devMode = false;
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
+        CommandHandlingService _cmdHandService;
         private IServiceProvider _services;
         private Tools t = new Tools();
         private ConfigXML configClass = new ConfigXML();
-        private XDocument configXML;
+        private XDocument _configXML;
         public async Task MainAsync()
         {
             // New Client
             // Load config.xml if doesn't exist create one. Both with exception handling.
-            this.configXML = this.configClass.LoadConfigXML();
+            this._configXML = this.configClass.LoadConfigXML();
 
             this._client = new DiscordSocketClient(new DiscordSocketConfig
             {
@@ -44,7 +46,7 @@ namespace Lilac_x3_Bot
             });
 
             // New CommandHandlingService
-            CommandHandlingService _cmdHandService = new CommandHandlingService(_client, _commands, configXML);
+            _cmdHandService = new CommandHandlingService(this._client, this._commands, this._configXML, this._devMode);
 
             // Add Own Features
             ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService, _devMode);
@@ -64,19 +66,21 @@ namespace Lilac_x3_Bot
             this._client.Log += Log;
             this._client.UserJoined += UserJoined;
 
-            if (this.configXML != null)
+            if (this._configXML != null)
             {
-                await _client.LoginAsync(TokenType.Bot, this.configClass.GetToken(configXML));
+                await _client.LoginAsync(TokenType.Bot, this.configClass.GetToken(_configXML));
             }
             else
             {
                 CloseByInvalidToken();
             }
             await _client.StartAsync();
+
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
 
+        // Fire if new user connect and download all member again
         private Task UserJoined(SocketGuildUser user)
         {
             t.CWLTextColor("User: " + user.Username + "Joined the Guild.", ConsoleColor.Yellow);
@@ -88,12 +92,14 @@ namespace Lilac_x3_Bot
             return Task.CompletedTask;
         }
 
+        // Write every msg depends on LogSeverity Level (enum)
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
             return Task.CompletedTask;
         }
 
+        // If token is invalid in configXML close this programm
         private void CloseByInvalidToken()
         {
             t.CWLTextColor("Der Token ist Invalid, bitte überprüfe den Token!", ConsoleColor.Red);

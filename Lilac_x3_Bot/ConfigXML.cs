@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -8,25 +9,25 @@ namespace Lilac_x3_Bot
     {
         // Member
         private Tools t = new Tools();
-        XDocument configXML;
-        static private string configFolder = @"E:\Visual Studio Projekte\dev\configs\";
+        XDocument _configXML;
+        static private string configFolder = @"./config/";
         static private string configFileName = "config.xml";
-        private string configPath = configFolder + configFileName;
+        private string _configPath = configFolder + configFileName;
        
         public XDocument LoadConfigXML()
         {
             try
             {
-                configXML = XDocument.Load(configPath);
-                return configXML;
+                this._configXML = XDocument.Load(this._configPath);
+                return this._configXML;
             }
             catch (Exception)
             {
                 bool create = this.CreateConfigXML();
                 if (create == true)
                 {
-                    configXML = XDocument.Load(configPath);
-                    return configXML;
+                    this._configXML = XDocument.Load(this._configPath);
+                    return this._configXML;
                 }
                 else
                 {
@@ -37,6 +38,15 @@ namespace Lilac_x3_Bot
 
         private bool CreateConfigXML()
         {
+            if (!Directory.Exists(configFolder))
+            {
+                Directory.CreateDirectory(configFolder);
+            }
+            else
+            {
+                t.CWLTextColor("Config Ordner konnte nicht erstellt werden!", ConsoleColor.Red);
+            }
+
             try
             {
                 XDocument config = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),
@@ -44,13 +54,19 @@ namespace Lilac_x3_Bot
                                                         new XElement("Init",
                                                             new XElement("Token", "Token Here")
                                                         ), 
-                                                        new XElement("UserChoice",
+                                                        new XElement("General",
                                                             new XElement("Prefix", "!"),
-                                                            new XElement("WriteChannel", new XAttribute("id", ""))
+                                                            new XElement("WriteIntoChannel", new XAttribute("id", "0")),
+                                                            new XElement("ReadFromChannel", new XAttribute("id", "0"))
+                                                        ),
+                                                        new XElement("Feature1337",
+                                                            new XElement("WriteIntoChannel", new XAttribute("id", "0")),
+                                                            new XElement("ReadFromChannel", new XAttribute("id", "0")),
+                                                            new XElement("Listen1337FromChannel", new XAttribute("id", "0"))
                                                         )
-                                                    )
+                                                     )
                                                 );
-                config.Save(configPath);
+                config.Save(this._configPath);
                 Console.WriteLine("config.xml war nicht vorhanden und wurde erstellt.");
                 this.t.CWLTextColor("Bitte die config.xml anpassen!", ConsoleColor.Yellow);
                 return true;
@@ -78,9 +94,55 @@ namespace Lilac_x3_Bot
             }
             catch (Exception)
             {
-                t.CWLTextColor("Can't get Token from config.xml", ConsoleColor.Red);
+                this.t.CWLTextColor("Can't get Token from config.xml", ConsoleColor.Red);
                 return null;
             }
+        }
+
+        public void ChangePrefix(char prefix)
+        {
+            this._configXML = LoadConfigXML();
+            var prefixQuery = from pre in this._configXML.Descendants("General")
+                              select pre;
+            foreach (var item in prefixQuery)
+            {
+                item.Element("Prefix").Value = prefix.ToString();
+            }
+            this._configXML.Save(this._configPath);
+        }
+
+        public void ChangeWriteIntoChannelID(ulong id, string modul, string moduleid)
+        {
+            this._configXML = LoadConfigXML();
+            var prefixQuery = from pre in this._configXML.Descendants(modul)
+                              select pre;
+            foreach (var item in prefixQuery)
+            {
+                item.Element(moduleid).Attribute("id").Value = id.ToString();
+            }
+            this._configXML.Save(this._configPath);
+        }
+
+        public ulong GetChannelUID(string feature, string element)
+        {
+            this._configXML = LoadConfigXML();
+            var chID = from id in this._configXML.Descendants(feature)
+                       select id;
+
+            ulong channelID = 0;
+            foreach (var item in chID)
+            {
+                if (item.Element(element).Attribute("id").Value != "0")
+                {
+                    channelID = Convert.ToUInt64(item.Element(element).Attribute("id").Value);
+                }
+                else
+                {
+                    InitBot init = new InitBot();
+                    if (init._devMode) t.CWLTextColor($"{feature} {element} ID nicht vorhanden", ConsoleColor.Yellow);
+                }
+            }
+            return channelID;
         }
     }
 }

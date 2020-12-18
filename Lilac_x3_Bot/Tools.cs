@@ -6,13 +6,19 @@ namespace Lilac_x3_Bot
 {
     public class Tools
     {
-        public string test;
         public void CWLTextColor(string text, ConsoleColor textColor)
         {
             Console.ForegroundColor = textColor;
             Console.WriteLine(text);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        public void CWLTextColor(Exception e, ConsoleColor textColor)
+        {
+            Console.ForegroundColor = textColor;
+            Console.WriteLine(e);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
         public string RemoveSpecificCharFromString(string yourString, char character)
         {
             string newString = "";
@@ -28,6 +34,23 @@ namespace Lilac_x3_Bot
                 }
             }
             return newString;
+        }
+
+        public string ShortenString(string text, int lenght)
+        {
+            string newText = "";
+            if (text.Length >= lenght)
+            {
+                for (int i = 0; i < lenght; i++)
+                {
+                    newText += text[i];
+                }
+                return newText;
+            }
+            else
+            {
+                return text;
+            }
         }
     }
 }
