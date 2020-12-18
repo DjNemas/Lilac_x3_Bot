@@ -139,14 +139,6 @@ namespace Lilac_x3_Bot.Service
             prefix.module = Module.General;
             commandsWithPrivilegs.Add(prefix);
 
-            // Add Shutdown Command
-            var shutdown = new CommandsWithPrivilegs();
-            shutdown.prefix = "!shutdown";
-            shutdown.privileg = Privilegs.ServerAdministrator;
-            shutdown.privilegName = "Serverweit Administrator";
-            shutdown.module = Module.General;
-            commandsWithPrivilegs.Add(shutdown);
-
             // Add Restart Command
             var restart = new CommandsWithPrivilegs();
             restart.prefix = "!restart";
@@ -154,6 +146,22 @@ namespace Lilac_x3_Bot.Service
             restart.privilegName = "Serverweit Administrator";
             restart.module = Module.General;
             commandsWithPrivilegs.Add(restart);
+
+            // Add Commands Command
+            var commands = new CommandsWithPrivilegs();
+            commands.prefix = "!commands";
+            commands.privileg = Privilegs.All;
+            commands.privilegName = "All";
+            commands.module = Module.General;
+            commandsWithPrivilegs.Add(commands);
+
+            // Add Commands Command
+            var credits = new CommandsWithPrivilegs();
+            credits.prefix = "!credits";
+            credits.privileg = Privilegs.All;
+            credits.privilegName = "All";
+            credits.module = Module.General;
+            commandsWithPrivilegs.Add(credits);
 
             // Add setoutputchannelgeneral Command
             var setoutputchannelgeneral = new CommandsWithPrivilegs();
@@ -195,22 +203,6 @@ namespace Lilac_x3_Bot.Service
             setinputchannel1337listen.module = Module.General;
             commandsWithPrivilegs.Add(setinputchannel1337listen);
 
-            // Add setinputchannel1337commands Command
-            var test1337 = new CommandsWithPrivilegs();
-            test1337.prefix = "!test1337";
-            test1337.privileg = Privilegs.ChannelManageChannel;
-            test1337.privilegName = "Channelweit Kanal verwalten";
-            test1337.module = Module.Feature1337;
-            commandsWithPrivilegs.Add(test1337);
-
-            // Add testgeneral Command
-            var testgeneral = new CommandsWithPrivilegs();
-            testgeneral.prefix = "!testgeneral";
-            testgeneral.privileg = Privilegs.ChannelManageChannel;
-            testgeneral.privilegName = "Channelweit Kanal verwalten";
-            testgeneral.module = Module.General;
-            commandsWithPrivilegs.Add(testgeneral);
-
             // Add 1337streak Command
             var feature1337streak = new CommandsWithPrivilegs();
             feature1337streak.prefix = "!1337streak";
@@ -250,6 +242,14 @@ namespace Lilac_x3_Bot.Service
             feature1337hcount.privilegName = "All";
             feature1337hcount.module = Module.Feature1337;
             commandsWithPrivilegs.Add(feature1337hcount);
+
+            // Add feature1337hstreak Command
+            var feature1337info = new CommandsWithPrivilegs();
+            feature1337info.prefix = "!1337info";
+            feature1337info.privileg = Privilegs.All;
+            feature1337info.privilegName = "All";
+            feature1337info.module = Module.Feature1337;
+            commandsWithPrivilegs.Add(feature1337info);
 
             return commandsWithPrivilegs;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 
@@ -9,7 +10,7 @@ namespace Lilac_x3_Bot
         // Member
         private Tools t = new Tools();
         XDocument _configXML;
-        static private string configFolder = @"E:\Visual Studio Projekte\dev\configs\";
+        static private string configFolder = @"./config/";
         static private string configFileName = "config.xml";
         private string _configPath = configFolder + configFileName;
        
@@ -37,6 +38,15 @@ namespace Lilac_x3_Bot
 
         private bool CreateConfigXML()
         {
+            if (!Directory.Exists(configFolder))
+            {
+                Directory.CreateDirectory(configFolder);
+            }
+            else
+            {
+                t.CWLTextColor("Config Ordner konnte nicht erstellt werden!", ConsoleColor.Red);
+            }
+
             try
             {
                 XDocument config = new XDocument(new XDeclaration("1.0", "utf-8", "yes"),

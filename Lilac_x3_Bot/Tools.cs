@@ -12,6 +12,13 @@ namespace Lilac_x3_Bot
             Console.WriteLine(text);
             Console.ForegroundColor = ConsoleColor.White;
         }
+        public void CWLTextColor(Exception e, ConsoleColor textColor)
+        {
+            Console.ForegroundColor = textColor;
+            Console.WriteLine(e);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
         public string RemoveSpecificCharFromString(string yourString, char character)
         {
             string newString = "";

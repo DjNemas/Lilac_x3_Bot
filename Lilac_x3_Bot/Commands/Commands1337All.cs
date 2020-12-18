@@ -1,9 +1,10 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Lilac_x3_Bot.Database.Tables;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Lilac_x3_Bot.Commands
 {
@@ -87,7 +88,7 @@ namespace Lilac_x3_Bot.Commands
             TablesHeader dbTable = new TablesHeader(db);
             db.Close();
             var streakQuery = from user in dbTable.Table1337
-                              orderby user.counter_all descending, user.username ascending
+                              orderby user.counter_streak descending, user.username ascending
                               select user;
             List<Table1337> users = streakQuery.ToList();
 
@@ -102,13 +103,13 @@ namespace Lilac_x3_Bot.Commands
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("```");
             sb.Append('-', 43).Append("Highscore List").Append('-', 42).AppendLine();
-            sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,14}|{5,22}|{6,10}|{7,10}\n",
+            sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}\n",
                  " ",
                  "Rank",
-                 "Username",
-                 "Counter All",
+                 "Username",                 
                  "Counter Streak",
                  "Counter Longest Streak",
+                 "Counter All",
                  "Date Begin",
                  "Date Last");
 
@@ -117,13 +118,13 @@ namespace Lilac_x3_Bot.Commands
             {
                 for (int i = 0; i < streakQuery.Count(); i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,14}|{5,22}|{6,10}|{7,10}",
+                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}",
                         "#",
                         i + 1,
-                        users.ElementAt(i).username,
-                        users.ElementAt(i).counter_all.ToString(),
+                        users.ElementAt(i).username,                        
                         users.ElementAt(i).counter_streak.ToString(),
                         users.ElementAt(i).counter_longest_streak.ToString(),
+                        users.ElementAt(i).counter_all.ToString(),
                         users.ElementAt(i).date_begin,
                         users.ElementAt(i).date_last
                         );
@@ -134,13 +135,13 @@ namespace Lilac_x3_Bot.Commands
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,14}|{5,22}|{6,10}|{7,10}",
+                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}",
                         "#",
                         i + 1,
                         users.ElementAt(i).username,
-                        users.ElementAt(i).counter_all.ToString(),
                         users.ElementAt(i).counter_streak.ToString(),
                         users.ElementAt(i).counter_longest_streak.ToString(),
+                        users.ElementAt(i).counter_all.ToString(),
                         users.ElementAt(i).date_begin,
                         users.ElementAt(i).date_last
                         );
@@ -308,6 +309,33 @@ namespace Lilac_x3_Bot.Commands
             {
                 await SendTo1337ChannelAsync(sb.ToString());
             }
+        }
+
+        [Command("1337info")]
+        public async Task Feature1337InfoAsync()
+        {
+            bool check = ReadChannel1337();
+            if (!check) return;
+
+            ulong channelID;
+            channelID =  _configXML.GetChannelUID("Feature1337", "Listen1337FromChannel");
+
+            var eb = new StringBuilder();
+            eb.AppendLine(">>> Feature 1337 Info\n");
+            eb.AppendLine("Was ist dieses 1337 Feature?");
+            if (channelID == 0)
+            {
+                eb.AppendLine("Genau um `13:37:00 - 13:37:59 Uhr` , werden in allen Channels `1337 und @1337`\n");
+                eb.AppendLine(" pro User und Tag genau 1x gezählt.");
+            }
+            else
+            {
+                eb.Append("Genau um `13:37:00 - 13:37:59 Uhr` , werden im Channel `" + Context.Guild.GetChannel(channelID).Name + "` , ");
+                eb.AppendLine("`1337 und @1337` pro User und Tag genau 1x gezählt.");
+            }
+            
+            await SendTo1337ChannelAsync(eb.ToString());
+
         }
     }
 }

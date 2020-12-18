@@ -42,17 +42,6 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
-        [Command("shutdown")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task ShutdownAsyc()
-        {
-            bool check = ReadChannelGeneral();
-            if (!check) return;
-
-            await SendToGeneralChannelAsync("Ich verabschiede mich mal o/");
-            Environment.Exit(0);
-        }
-
         [Command("restart")]
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task RestartAsyc()

@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.Service;
 using System;
@@ -13,7 +14,7 @@ namespace Lilac_x3_Bot.Commands
     public class CommandHeader : ModuleBase<SocketCommandContext>
     {
         // Member
-        private ConfigXML _configXML = new ConfigXML();
+        public  ConfigXML _configXML = new ConfigXML();
         public Tools t = new Tools();
         public DatabaseInit dbClass = new DatabaseInit();
         public char Prefix;
@@ -109,6 +110,17 @@ namespace Lilac_x3_Bot.Commands
             else
             {
                 await Context.Guild.GetTextChannel(Feature1337WriteIntoChannelID).SendMessageAsync(msg);
+            }
+        }
+        public async Task SendTo1337ChannelAsync(Embed embed)
+        {
+            if (Feature1337WriteIntoChannelID == 0)
+            {
+                await Context.Guild.GetTextChannel(Context.Channel.Id).SendMessageAsync(null,false,embed);
+            }
+            else
+            {
+                await Context.Guild.GetTextChannel(Feature1337WriteIntoChannelID).SendMessageAsync(null,false,embed);
             }
         }
         public async Task SendTo1337ChannelAsync(string msg, SocketCommandContext context)
