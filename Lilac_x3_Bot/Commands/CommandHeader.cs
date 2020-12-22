@@ -18,6 +18,7 @@ namespace Lilac_x3_Bot.Commands
         public Tools t = new Tools();
         public DatabaseInit dbClass = new DatabaseInit();
         public char Prefix;
+        public string Version;
         public static ulong Feature1337WriteIntoChannelID { get; set; }
         public static ulong Feature1337ReadFromChannelID { get; set; }
         public static ulong GenerelWriteIntoChannelID { get; set; }
@@ -26,6 +27,9 @@ namespace Lilac_x3_Bot.Commands
 
         public CommandHeader()
         {
+            InitBot init = new InitBot();
+            this.Version = init.GetVersion();
+
             CommandHandlingService pre = new CommandHandlingService();
             this.Prefix = pre.GetPrefix();
 

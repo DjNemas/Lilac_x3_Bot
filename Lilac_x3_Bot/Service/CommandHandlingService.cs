@@ -133,7 +133,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add Prefix Command
             var prefix = new CommandsWithPrivilegs();
-            prefix.prefix = "!prefix";
+            prefix.prefix = this._prefix + "prefix";
             prefix.privileg = Privilegs.ServerAdministrator;
             prefix.privilegName = "Serverweit Administrator";
             prefix.module = Module.General;
@@ -141,7 +141,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add Restart Command
             var restart = new CommandsWithPrivilegs();
-            restart.prefix = "!restart";
+            restart.prefix = this._prefix + "restart";
             restart.privileg = Privilegs.ServerAdministrator;
             restart.privilegName = "Serverweit Administrator";
             restart.module = Module.General;
@@ -149,23 +149,31 @@ namespace Lilac_x3_Bot.Service
 
             // Add Commands Command
             var commands = new CommandsWithPrivilegs();
-            commands.prefix = "!commands";
+            commands.prefix = this._prefix + "commands";
             commands.privileg = Privilegs.All;
             commands.privilegName = "All";
             commands.module = Module.General;
             commandsWithPrivilegs.Add(commands);
 
-            // Add Commands Command
+            // Add Credits Command
             var credits = new CommandsWithPrivilegs();
-            credits.prefix = "!credits";
+            credits.prefix = this._prefix + "credits";
             credits.privileg = Privilegs.All;
             credits.privilegName = "All";
             credits.module = Module.General;
             commandsWithPrivilegs.Add(credits);
 
+            // Add Version Command
+            var version = new CommandsWithPrivilegs();
+            version.prefix = this._prefix + "version";
+            version.privileg = Privilegs.All;
+            version.privilegName = "All";
+            version.module = Module.General;
+            commandsWithPrivilegs.Add(version);
+
             // Add setoutputchannelgeneral Command
             var setoutputchannelgeneral = new CommandsWithPrivilegs();
-            setoutputchannelgeneral.prefix = "!setoutputchannelgeneral";
+            setoutputchannelgeneral.prefix = this._prefix + "setoutputchannelgeneral";
             setoutputchannelgeneral.privileg = Privilegs.ServerAdministrator;
             setoutputchannelgeneral.privilegName = "Serverweit Administrator";
             setoutputchannelgeneral.module = Module.General;
@@ -173,7 +181,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add setoutputchannel1337 Command
             var setoutputchannel1337 = new CommandsWithPrivilegs();
-            setoutputchannel1337.prefix = "!setoutputchannel1337";
+            setoutputchannel1337.prefix = this._prefix + "setoutputchannel1337";
             setoutputchannel1337.privileg = Privilegs.ServerAdministrator;
             setoutputchannel1337.privilegName = "Serverweit Administrator";
             setoutputchannel1337.module = Module.General;
@@ -181,7 +189,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add setinputchannelgeneral Command
             var setinputchannelgeneral = new CommandsWithPrivilegs();
-            setinputchannelgeneral.prefix = "!setinputchannelgeneral";
+            setinputchannelgeneral.prefix = this._prefix + "setinputchannelgeneral";
             setinputchannelgeneral.privileg = Privilegs.ServerAdministrator;
             setinputchannelgeneral.privilegName = "Serverweit Administrator";
             setinputchannelgeneral.module = Module.General;
@@ -189,7 +197,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add setinputchannel1337commands Command
             var setinputchannel1337commands = new CommandsWithPrivilegs();
-            setinputchannel1337commands.prefix = "!setinputchannel1337commands";
+            setinputchannel1337commands.prefix = this._prefix + "setinputchannel1337commands";
             setinputchannel1337commands.privileg = Privilegs.ServerAdministrator;
             setinputchannel1337commands.privilegName = "Serverweit Administrator";
             setinputchannel1337commands.module = Module.General;
@@ -197,7 +205,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add setinputchannel1337listen Command
             var setinputchannel1337listen = new CommandsWithPrivilegs();
-            setinputchannel1337listen.prefix = "!setinputchannel1337listen";
+            setinputchannel1337listen.prefix = this._prefix + "setinputchannel1337listen";
             setinputchannel1337listen.privileg = Privilegs.ServerAdministrator;
             setinputchannel1337listen.privilegName = "Serverweit Administrator";
             setinputchannel1337listen.module = Module.General;
@@ -205,7 +213,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add 1337streak Command
             var feature1337streak = new CommandsWithPrivilegs();
-            feature1337streak.prefix = "!1337streak";
+            feature1337streak.prefix = this._prefix + "1337streak";
             feature1337streak.privileg = Privilegs.All;
             feature1337streak.privilegName = "All";
             feature1337streak.module = Module.Feature1337;
@@ -213,7 +221,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add feature1337count Command
             var feature1337count = new CommandsWithPrivilegs();
-            feature1337count.prefix = "!1337count";
+            feature1337count.prefix = this._prefix + "1337count";
             feature1337count.privileg = Privilegs.All;
             feature1337count.privilegName = "All";
             feature1337count.module = Module.Feature1337;
@@ -221,7 +229,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add feature1337count Command
             var feature1337highscore = new CommandsWithPrivilegs();
-            feature1337highscore.prefix = "!1337highscore";
+            feature1337highscore.prefix = this._prefix + "1337highscore";
             feature1337highscore.privileg = Privilegs.All;
             feature1337highscore.privilegName = "All";
             feature1337highscore.module = Module.Feature1337;
@@ -229,7 +237,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add feature1337hstreak Command
             var feature1337hstreak = new CommandsWithPrivilegs();
-            feature1337hstreak.prefix = "!1337hstreak";
+            feature1337hstreak.prefix = this._prefix + "1337hstreak";
             feature1337hstreak.privileg = Privilegs.All;
             feature1337hstreak.privilegName = "All";
             feature1337hstreak.module = Module.Feature1337;
@@ -237,7 +245,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add feature1337hstreak Command
             var feature1337hcount = new CommandsWithPrivilegs();
-            feature1337hcount.prefix = "!1337hcount";
+            feature1337hcount.prefix = this._prefix + "1337hcount";
             feature1337hcount.privileg = Privilegs.All;
             feature1337hcount.privilegName = "All";
             feature1337hcount.module = Module.Feature1337;
@@ -245,7 +253,7 @@ namespace Lilac_x3_Bot.Service
 
             // Add feature1337hstreak Command
             var feature1337info = new CommandsWithPrivilegs();
-            feature1337info.prefix = "!1337info";
+            feature1337info.prefix = this._prefix + "1337info";
             feature1337info.privileg = Privilegs.All;
             feature1337info.privilegName = "All";
             feature1337info.module = Module.Feature1337;

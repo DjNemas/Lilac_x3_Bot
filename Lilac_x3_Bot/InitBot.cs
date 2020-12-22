@@ -16,6 +16,7 @@ namespace Lilac_x3_Bot
     {
         // DevMode Member
         public bool _devMode = false;
+        private string _version = "Version 1.1";
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -46,16 +47,16 @@ namespace Lilac_x3_Bot
             });
 
             // New CommandHandlingService
-            _cmdHandService = new CommandHandlingService(this._client, this._commands, this._configXML, this._devMode);
+            this._cmdHandService = new CommandHandlingService(this._client, this._commands, this._configXML, this._devMode);
 
             // Add Own Features
             ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService, _devMode);
 
             // New ServiceCollection
             this._services = new ServiceCollection()
-                .AddSingleton(_client)
-                .AddSingleton(_commands)
-                .AddSingleton(_cmdHandService)
+                .AddSingleton(this._client)
+                .AddSingleton(this._commands)
+                .AddSingleton(this._cmdHandService)
                 // Add More Services below if needed
                 .AddSingleton(_listenFor1337)
                 .BuildServiceProvider();
@@ -117,6 +118,11 @@ namespace Lilac_x3_Bot
                 Thread.Sleep(1000);
             }
             System.Environment.Exit(1);
+        }
+
+        public string GetVersion()
+        {
+            return this._version;
         }
     }
 }
