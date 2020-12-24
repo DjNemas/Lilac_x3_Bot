@@ -70,13 +70,13 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine(">>> __Aktuelle Version: " + this.Version + "__");
             str.AppendLine();
             str.AppendLine("__Neu in dieser Version:__");
-            str.AppendLine("Nur Bugfixes.");
+            str.AppendLine("Neu: " + this.Prefix+ "version und " + this.Prefix + "credits");
+            str.AppendLine("Bugfixes.");
             str.AppendLine();
             str.AppendLine("__Bufixes und bekannte Bugs:__");
             str.AppendLine("Behoben: Wenn man " + this.Prefix + " aufgerufen hat, wurde der Prefix beim wechsel nicht übernommen.");
             str.AppendLine("Behoben: Beim wechsel vom Prefix, wurde bei Usern die nicht Autorisiert für ein Command sind, eine falsche Fehlermeldung ausgegeben.");
             str.AppendLine("Behoben: Bot gab eine Nachricht aus, wenn User wiederholt beim Feature 1337 gezählt wurden.");
-            str.AppendLine("Behoben: User wurden angepingt, wenn diese wiederholt gezählt werden.");
             str.AppendLine("Bekannt: In einigen Textausgaben, fehlen noch Emotes.");
             str.AppendLine();
             str.AppendLine("__Next Steps:__");
