@@ -30,7 +30,6 @@ namespace Lilac_x3_Bot.Commands
         [Command("commands")]
         public async Task CommandsGeneralAllAsync([Remainder] string args = null)
         {
-            await this.SendToGeneralChannelAllAsync("Test All");
             bool check = this.ReadChannelGeneralAll();
             if (!check) return;
 

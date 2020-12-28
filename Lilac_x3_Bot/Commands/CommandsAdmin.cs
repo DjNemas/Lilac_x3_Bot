@@ -13,7 +13,6 @@ namespace Lilac_x3_Bot.Commands
         [RequireUserPermission(GuildPermission.Administrator)]
         public async Task CommandsGeneralAdminAsync([Remainder] string args = null)
         {
-            await this.SendToGeneralChannelAdminAsync("Test Admin");
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
 
