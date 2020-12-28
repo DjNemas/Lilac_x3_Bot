@@ -35,9 +35,9 @@ namespace Lilac_x3_Bot.Commands
             }
             else
             {
-                if (countArgs[0] != "general")
+                if (countArgs[0] != "general" && countArgs[0] != "1337")
                 {
-                    await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Falsches Modul\nBitte nutze " +
+                    await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Falsches Modul\nBitte nutze " +
                         this.Prefix + "moduls um eine Liste der Module zu erhalten.");
                     return;
                 }
@@ -47,18 +47,25 @@ namespace Lilac_x3_Bot.Commands
                         this.Prefix + "moduls um eine Liste der Berechtigungsgruppen zu erhalten.");
                     return;
                 }
-                if (countArgs[1] == "all")
+                if (countArgs[0] == "general" && countArgs[1] == "all")
                 {
                     var str = new StringBuilder();
                     str = HeaderCommandsList(str);
                     str = GeneralAllCommandsList(str);
                     await this.SendToGeneralChannelAdminAsync(str.ToString());
                 }
-                if (countArgs[1] == "admin")
+                if (countArgs[0] == "general" && countArgs[1] == "admin")
                 {
                     var str = new StringBuilder();
                     str = HeaderCommandsList(str);
                     str = GeneralAdminCommandsList(str);
+                    await this.SendToGeneralChannelAdminAsync(str.ToString());
+                }
+                if (countArgs[0] == "1337" && countArgs[1] == "all")
+                {
+                    var str = new StringBuilder();
+                    str = HeaderCommandsList(str);
+                    str = Feature1337AllCommandsList(str);
                     await this.SendToGeneralChannelAdminAsync(str.ToString());
                 }
             }
@@ -108,15 +115,46 @@ namespace Lilac_x3_Bot.Commands
             await this.RestartBot();
         }
 
-        [Command("setoutputchannelgeneral")]
+        [Command("setoutputchannelgeneralall")]
         [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task SetOutputChannelGeneralAsync([Remainder] string args = null)
+        public async Task SetOutputChannelGeneralAllAsync([Remainder] string args = null)
         {
             // return if its not the Modul Channel ID or 0
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
 
-            await this.SetOutputID(args, "setoutputchannelgeneral", "General", "WriteIntoChannel");
+            await this.SetOutputID(args, "setoutputchannelgeneralall", "General", "All", "WriteIntoChannelAll");
+        }
+        [Command("setinputchannelgeneralall")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetInputChannelGeneralAllAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = this.ReadChannelGeneralAdmin();
+            if (!check) return;
+
+            await this.SetOutputID(args, "setinputchannelgeneralall", "General", "All", "ReadFromChannelAll");
+        }
+
+        [Command("setoutputchannelgeneraladmin")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetOutputChannelGeneralAdminAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = this.ReadChannelGeneralAdmin();
+            if (!check) return;
+
+            await this.SetOutputID(args, "setoutputchannelgeneraladmin", "General", "Admin", "WriteIntoChannelAdmin");
+        }
+        [Command("setinputchannelgeneraladmin")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetInputChannelGeneralAdminAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = this.ReadChannelGeneralAdmin();
+            if (!check) return;
+
+            await this.SetOutputID(args, "setinputchannelgeneraladmin", "General", "Admin", "ReadFromChannelAdmin");
         }
 
         [Command("setoutputchannel1337")]
@@ -127,18 +165,7 @@ namespace Lilac_x3_Bot.Commands
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
 
-            await this.SetOutputID(args, "setoutputchannel1337", "Feature1337", "WriteIntoChannel");
-        }
-
-        [Command("setinputchannelgeneral")]
-        [RequireUserPermission(GuildPermission.Administrator)]
-        public async Task SetInputChannelGeneralAsync([Remainder] string args = null)
-        {
-            // return if its not the Modul Channel ID or 0
-            bool check = this.ReadChannelGeneralAdmin();
-            if (!check) return;
-
-            await this.SetOutputID(args, "setinputchannelgeneral", "General", "ReadFromChannel");
+            await this.SetOutputID(args, "setoutputchannel1337", "Feature1337", "All", "WriteIntoChannel");
         }
 
         [Command("setinputchannel1337commands")]
@@ -149,7 +176,7 @@ namespace Lilac_x3_Bot.Commands
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
 
-            await this.SetOutputID(args, "setinputchannel1337commands", "Feature1337", "ReadFromChannel");
+            await this.SetOutputID(args, "setinputchannel1337commands", "Feature1337", "All", "ReadFromChannel");
         }
 
         [Command("setinputchannel1337listen")]
@@ -159,7 +186,7 @@ namespace Lilac_x3_Bot.Commands
             // return if its not the Modul Channel ID or 0
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
-            await this.SetOutputID(args, "setinputchannel1337read", "Feature1337", "Listen1337FromChannel");
+            await this.SetOutputID(args, "setinputchannel1337read", "Feature1337", "Listen", "Listen1337FromChannel");
         }
     }
 }

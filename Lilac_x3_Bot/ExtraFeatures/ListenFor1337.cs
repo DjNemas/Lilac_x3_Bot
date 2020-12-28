@@ -187,7 +187,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
                         t.CWLTextColor(DateTime.Now.ToString() + " 4 " + context.Guild.GetUser(message.Author.Id).Username +
                             " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649> ", ConsoleColor.Yellow);
                     }
-
                 }
                 this.db.Close();
             }

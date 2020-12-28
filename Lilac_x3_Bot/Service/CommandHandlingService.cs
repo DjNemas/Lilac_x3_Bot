@@ -193,13 +193,37 @@ namespace Lilac_x3_Bot.Service
             version.module = Module.General;
             commandsWithPrivilegs.Add(version);
 
-            // Add setoutputchannelgeneral Command
-            var setoutputchannelgeneral = new CommandsWithPrivilegs();
-            setoutputchannelgeneral.prefix = this._prefix + "setoutputchannelgeneral";
-            setoutputchannelgeneral.privileg = Privilegs.ServerAdministrator;
-            setoutputchannelgeneral.privilegName = "Serverweit Administrator";
-            setoutputchannelgeneral.module = Module.General;
-            commandsWithPrivilegs.Add(setoutputchannelgeneral);
+            // Add setoutputchannelgeneralall Command
+            var setoutputchannelgeneralall = new CommandsWithPrivilegs();
+            setoutputchannelgeneralall.prefix = this._prefix + "setoutputchannelgeneralall";
+            setoutputchannelgeneralall.privileg = Privilegs.ServerAdministrator;
+            setoutputchannelgeneralall.privilegName = "Serverweit Administrator";
+            setoutputchannelgeneralall.module = Module.General;
+            commandsWithPrivilegs.Add(setoutputchannelgeneralall);
+
+            // Add setinputchannelgeneralall Command
+            var setinputchannelgeneralall = new CommandsWithPrivilegs();
+            setinputchannelgeneralall.prefix = this._prefix + "setinputchannelgeneralall";
+            setinputchannelgeneralall.privileg = Privilegs.ServerAdministrator;
+            setinputchannelgeneralall.privilegName = "Serverweit Administrator";
+            setinputchannelgeneralall.module = Module.General;
+            commandsWithPrivilegs.Add(setinputchannelgeneralall);
+
+            // Add setoutputchannelgeneraladmin Command
+            var setoutputchannelgeneraladmin = new CommandsWithPrivilegs();
+            setoutputchannelgeneraladmin.prefix = this._prefix + "setoutputchannelgeneraladmin";
+            setoutputchannelgeneraladmin.privileg = Privilegs.ServerAdministrator;
+            setoutputchannelgeneraladmin.privilegName = "Serverweit Administrator";
+            setoutputchannelgeneraladmin.module = Module.General;
+            commandsWithPrivilegs.Add(setoutputchannelgeneraladmin);
+
+            // Add setinputchannelgeneraladmin Command
+            var setinputchannelgeneraladmin = new CommandsWithPrivilegs();
+            setinputchannelgeneraladmin.prefix = this._prefix + "setinputchannelgeneraladmin";
+            setinputchannelgeneraladmin.privileg = Privilegs.ServerAdministrator;
+            setinputchannelgeneraladmin.privilegName = "Serverweit Administrator";
+            setinputchannelgeneraladmin.module = Module.General;
+            commandsWithPrivilegs.Add(setinputchannelgeneraladmin);
 
             // Add setoutputchannel1337 Command
             var setoutputchannel1337 = new CommandsWithPrivilegs();
@@ -208,14 +232,6 @@ namespace Lilac_x3_Bot.Service
             setoutputchannel1337.privilegName = "Serverweit Administrator";
             setoutputchannel1337.module = Module.General;
             commandsWithPrivilegs.Add(setoutputchannel1337);
-
-            // Add setinputchannelgeneral Command
-            var setinputchannelgeneral = new CommandsWithPrivilegs();
-            setinputchannelgeneral.prefix = this._prefix + "setinputchannelgeneral";
-            setinputchannelgeneral.privileg = Privilegs.ServerAdministrator;
-            setinputchannelgeneral.privilegName = "Serverweit Administrator";
-            setinputchannelgeneral.module = Module.General;
-            commandsWithPrivilegs.Add(setinputchannelgeneral);
 
             // Add setinputchannel1337commands Command
             var setinputchannel1337commands = new CommandsWithPrivilegs();

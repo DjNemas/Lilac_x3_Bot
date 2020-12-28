@@ -40,6 +40,7 @@ namespace Lilac_x3_Bot.Commands
                 return;
             }
 
+            args = args.ToLower();
             string[] countArgs = args.Split(' ');
 
             if (countArgs.Length < 2)
@@ -52,7 +53,7 @@ namespace Lilac_x3_Bot.Commands
             }
             else
             {
-                if (countArgs[0] != "general")
+                if (countArgs[0] != "general" && countArgs[0] != "1337")
                 {
                     await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Falsches Modul\nBitte nutze " +
                         this.Prefix + "moduls um eine Liste der Module zu erhalten.");
@@ -64,17 +65,25 @@ namespace Lilac_x3_Bot.Commands
                         this.Prefix + "moduls um eine Liste der Berechtigungsgruppen zu erhalten.");
                     return;
                 }
-                if (countArgs[1] == "admin")
+                if (countArgs[0] == "general" && countArgs[1] == "admin")
                 {
                     await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Du bist nicht berechtigt diese Commandsliste einzusehen.");
                     return;
                 }
-                //Context.Guild.GetUser(Context.User.Id).GuildPermissions.Administrator
-                var str = new StringBuilder();
-                str = HeaderCommandsList(str);
-                str = GeneralAllCommandsList(str);
-
-                await this.SendToGeneralChannelAllAsync(str.ToString());
+                if (countArgs[0] == "general" && countArgs[1] == "all")
+                {
+                    var str = new StringBuilder();
+                    str = HeaderCommandsList(str);
+                    str = GeneralAllCommandsList(str);
+                    await this.SendToGeneralChannelAllAsync(str.ToString());
+                }
+                if (countArgs[0] == "1337" && countArgs[1] == "all")
+                {
+                    var str = new StringBuilder();
+                    str = HeaderCommandsList(str);
+                    str = Feature1337AllCommandsList(str);
+                    await this.SendToGeneralChannelAllAsync(str.ToString());
+                }
             }
         }
 
@@ -90,6 +99,9 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("Der Bot wurde von " + Context.Client.GetUser(123613862237831168) + " Programmiert.");
             str.AppendLine("Der Source Code ist auf https://github.com/DjNemas/ zu finden.");
             str.AppendLine("Kontaktiert mich doch gerne bei Fragen oder Problemen :) ");
+            str.AppendLine();
+            str.AppendLine("Ein Riesen Dankeschön geht an " + Context.Client.GetUser(308716816593584128) + " für das stundenlange Testen am Bot!");
+            str.AppendLine("Dank deiner Hilfe geht das Development viel schneller! <a:LilacxLoveGIF:708464221037527110>");
 
             await this.SendToGeneralChannelAllAsync(str.ToString());
         }

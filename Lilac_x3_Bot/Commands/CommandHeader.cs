@@ -52,7 +52,7 @@ namespace Lilac_x3_Bot.Commands
         // For Listen on General Commands "All"
         public bool ReadChannelGeneralAll()
         {
-            if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAdminID == 0)
+            if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAllID == 0)
             {
                 return true;
             }
@@ -64,7 +64,7 @@ namespace Lilac_x3_Bot.Commands
 
         public bool ReadChannelGeneralAll(SocketCommandContext context)
         {
-            if (GenerelReadFromChannelAllID == context.Channel.Id || GenerelReadFromChannelAdminID == 0)
+            if (GenerelReadFromChannelAllID == context.Channel.Id || GenerelReadFromChannelAllID == 0)
             {
                 return true;
             }
@@ -260,7 +260,7 @@ namespace Lilac_x3_Bot.Commands
             Environment.Exit(0);
         }
 
-        public async Task SetOutputID(string args, string commandname, string modul, string modulID)
+        public async Task SetOutputID(string args, string commandname, string modul, string group, string modulID)
         {
             // need a argument
             if (args != null)
@@ -311,7 +311,7 @@ namespace Lilac_x3_Bot.Commands
                         else
                         {
                             await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
-                            "` wurde für das Modul `"+ modul +"` gesetzt.");
+                            "` wurde für das Modul `"+ modul + " " + group + "` gesetzt.");
                         }
                     }
                     else
@@ -338,6 +338,7 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "commands` Eine Liste voller Kommandos.");
             str.AppendLine("`" + this.Prefix + "moduls` Eine Liste von Modulen und deren Berechtigungsgruppen.");
             str.AppendLine("`" + this.Prefix + "credits` Zeigt die Credits an.");
+            str.AppendLine("`" + this.Prefix + "version` Zeigt die Aktuelle Version und UpdateLog des Bots an.");
             str.AppendLine();
             return str;
         }
@@ -347,9 +348,11 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("__Berechtigung: Nur Serverweite Administratoren | Modul General__");
             str.AppendLine("`" + this.Prefix + "prefix <prefix>` Hiermit stellst du den Prefix ein (nur 1 Zeichen erlaubt).");
             str.AppendLine("`" + this.Prefix + "restart` Hiermit wird der Bot neugestartet. Bitte nur verwenden, wenn spezielle Einstellungen wie Prefix geändert wurde oder bei Problemen!");
-            str.AppendLine("`" + this.Prefix + "setoutputchannelgeneral <ChannelID>` Hier soll der Bot alle `Modul General` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
+            str.AppendLine("`" + this.Prefix + "setoutputchannelgeneralall <ChannelID>` Hier soll der Bot alle `Modul General All` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
+            str.AppendLine("`" + this.Prefix + "setinputchannelgeneralall <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General All, bei channelID 0 wird überall gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setoutputchannelgeneraladmin <ChannelID>` Hier soll der Bot alle `Modul General Admin` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
+            str.AppendLine("`" + this.Prefix + "setinputchannelgeneraladmin <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General Admin, bei channelID 0 wird überall gelauscht.");
             str.AppendLine("`" + this.Prefix + "setoutputchannel1337 <ChannelID>` Hier soll der Bot alle `Modul 1337` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
-            str.AppendLine("`" + this.Prefix + "setinputchannelgeneral <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General, bei channelID 0 wird überall gelauscht.");
             str.AppendLine("`" + this.Prefix + "setinputchannel1337commands` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
             str.AppendLine("`" + this.Prefix + "setinputchannel1337listen` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
             return str;
