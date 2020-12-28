@@ -56,8 +56,10 @@ namespace Lilac_x3_Bot
                                                         ), 
                                                         new XElement("General",
                                                             new XElement("Prefix", "!"),
-                                                            new XElement("WriteIntoChannel", new XAttribute("id", "0")),
-                                                            new XElement("ReadFromChannel", new XAttribute("id", "0"))
+                                                            new XElement("WriteIntoChannelAll", new XAttribute("id", "0")),
+                                                            new XElement("WriteIntoChannelAdmin", new XAttribute("id", "0")),
+                                                            new XElement("ReadFromChannelAll", new XAttribute("id", "0")),
+                                                            new XElement("ReadFromChannelAdmin", new XAttribute("id", "0"))
                                                         ),
                                                         new XElement("Feature1337",
                                                             new XElement("WriteIntoChannel", new XAttribute("id", "0")),

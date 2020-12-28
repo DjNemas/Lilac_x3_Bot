@@ -3,6 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>1.1.0</Version>
+    <Authors>DjNemas</Authors>
+    <Description>A Discord Bot for Lilac_x3</Description>
+    <Copyright>DjNemas</Copyright>
+    <RepositoryUrl>https://github.com/DjNemas/Lilac_x3_Bot</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/DjNemas/Lilac_x3_Bot</PackageProjectUrl>
+    <PackageTags>Discord,Bot,DjNemas,c sharp,c#</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

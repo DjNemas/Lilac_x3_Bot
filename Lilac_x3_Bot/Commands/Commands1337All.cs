@@ -25,7 +25,7 @@ namespace Lilac_x3_Bot.Commands
 
             if (streakQuery.Count() == 0)
             {
-                await SendTo1337ChannelAsync(Context.User.Mention + " Du hast noch nie am 1337 Event teilgenommen. <EMOTE?> ");
+                await SendTo1337ChannelAsync(Context.User.Mention + " Du hast noch nie am 1337 Event teilgenommen. <:SadCat:766665234273402910> ");
                 return;
             }
             else 
@@ -67,7 +67,7 @@ namespace Lilac_x3_Bot.Commands
 
             if (streakQuery.Count() == 0)
             {
-                await SendTo1337ChannelAsync(Context.User.Mention + " Du hast noch nie am 1337 Event teilgenommen. <EMOTE?> ");
+                await SendTo1337ChannelAsync(Context.User.Mention + " Du hast noch nie am 1337 Event teilgenommen. <:SadCat:766665234273402910> ");
                 return;
             }
             else
