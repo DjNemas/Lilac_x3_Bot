@@ -46,23 +46,12 @@ namespace Lilac_x3_Bot.ExtraFeatures
             
             // Get Time to Check if we are on right time and prepare the string for it
             string timeNowAsString = DateTime.Now.ToLongTimeString();
-            string timeBeginAsString = this.timeBegin.ToLongTimeString();
-            string timeEndAsString = this.timeEnd.ToLongTimeString();
+            //string timeBeginAsString = this.timeBegin.ToLongTimeString();
+            //string timeEndAsString = this.timeEnd.ToLongTimeString();
             int timeNowAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeNowAsString, ':'));
-            int timeBeginAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeBeginAsString, ':'));
-            int timeEndAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeEndAsString, ':'));
-
-            //Check if it is the right time! 133700 - 133759 otherwise break
-            if (!(timeBeginAsInt <= timeNowAsInt && timeEndAsInt > timeNowAsInt))
-            {
-                if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                    " Nicht in der richtigen Zeit!", context);
-                t.CWLTextColor(DateTime.Now.ToString() + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
-                return;
-            }
-
-            this.db = this.dbClass.connect();
-            TablesHeader dbTable = new TablesHeader(this.db);
+            //int timeBeginAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeBeginAsString, ':'));
+            //int timeEndAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeEndAsString, ':'));
+            
 
             // check if message contains a mention and get this mention as id to string
             string rolles = " ";
@@ -98,6 +87,18 @@ namespace Lilac_x3_Bot.ExtraFeatures
             // check if message has 1337 or @1337 ones!
             if (counter1337 == 1 && counterM1337 != 1 || counter1337 != 1 && counterM1337 == 1)
             {
+                //Check if it is the right time! 133700 - 133759 otherwise break
+                if (!(133700 <= timeNowAsInt && 133759 > timeNowAsInt))
+                {
+                    if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
+                        " Nicht in der richtigen Zeit!", context);
+                    t.CWLTextColor(DateTime.Now.ToString() + " 1 " + context.Guild.GetUser(message.Author.Id).Username + " Nicht in der richtigen Zeit!", ConsoleColor.Yellow);
+                    return;
+                }
+
+                this.db = this.dbClass.connect();
+                TablesHeader dbTable = new TablesHeader(this.db);
+
                 // select the curent users userid from database
                 var table1337 = dbTable.Table1337;
                 var userID = from table in table1337
@@ -123,7 +124,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     dbTable.SubmitChanges();
                     if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                         " Hab dich gezählt :P", context);
-                    t.CWLTextColor(DateTime.Now.ToString() + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
+                    t.CWLTextColor(DateTime.Now.ToString() + " 2 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
                 }
                 else // Update user if allready exist
                 {
@@ -177,13 +178,13 @@ namespace Lilac_x3_Bot.ExtraFeatures
                         dbTable.SubmitChanges();
                         if (_devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                             " Hab dich gezählt :P", context);
-                        t.CWLTextColor(DateTime.Now.ToString() + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
+                        t.CWLTextColor(DateTime.Now.ToString() + " 3 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
                     }
                     else
                     {
                         if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                             " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649>", context);
-                        t.CWLTextColor(DateTime.Now.ToString() + context.Guild.GetUser(message.Author.Id).Username +
+                        t.CWLTextColor(DateTime.Now.ToString() + " 4 " + context.Guild.GetUser(message.Author.Id).Username +
                             " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649> ", ConsoleColor.Yellow);
                     }
 

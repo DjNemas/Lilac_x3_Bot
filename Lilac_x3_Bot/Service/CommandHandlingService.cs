@@ -96,13 +96,27 @@ namespace Lilac_x3_Bot.Service
             {
                 if (currentCommand.module == Module.General)
                 {
-                    bool check = _header.ReadChannelGeneral(context);
-                    if (!check) return;
+                    if (currentCommand.privileg == Privilegs.All)
+                    {
+                        bool check = _header.ReadChannelGeneralAll(context);
+                        if (!check) return;
 
-                    await this._header.SendToGeneralChannelAsync(
-                    "Du hast nicht die Berechtigung `" + currentCommand.prefix +
-                    "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
-                    , context);
+                        await this._header.SendToGeneralChannelAllAsync(
+                        "Du hast nicht die Berechtigung `" + currentCommand.prefix +
+                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
+                        , context);
+
+                    }
+                    if (currentCommand.privileg == Privilegs.ServerAdministrator)
+                    {
+                        bool check = _header.ReadChannelGeneralAdmin(context);
+                        if (!check) return;
+
+                        await this._header.SendToGeneralChannelAdminAsync(
+                        "Du hast nicht die Berechtigung `" + currentCommand.prefix +
+                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
+                        , context);
+                    }
                 }
                 else if (currentCommand.module == Module.Feature1337)
                 {
@@ -118,7 +132,7 @@ namespace Lilac_x3_Bot.Service
             }
             if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
             {
-                await this._header.SendToGeneralChannelAsync(result.ToString(), context);
+                await this._header.SendToGeneralChannelAllAsync(result.ToString(), context);
             }
         }
 
@@ -146,6 +160,14 @@ namespace Lilac_x3_Bot.Service
             restart.privilegName = "Serverweit Administrator";
             restart.module = Module.General;
             commandsWithPrivilegs.Add(restart);
+
+            // Add Moduls Command
+            var moduls = new CommandsWithPrivilegs();
+            moduls.prefix = this._prefix + "moduls";
+            moduls.privileg = Privilegs.All;
+            moduls.privilegName = "All";
+            moduls.module = Module.General;
+            commandsWithPrivilegs.Add(moduls);
 
             // Add Commands Command
             var commands = new CommandsWithPrivilegs();

@@ -21,9 +21,12 @@ namespace Lilac_x3_Bot.Commands
         public string Version;
         public static ulong Feature1337WriteIntoChannelID { get; set; }
         public static ulong Feature1337ReadFromChannelID { get; set; }
-        public static ulong GenerelWriteIntoChannelID { get; set; }
-        public static ulong GenerelReadFromChannelID { get; set; }
-        public static ulong Listen1337FFromChannelID { get; set; }
+        public static ulong Feature1337ListenFromChannelID { get; set; }
+        public static ulong GenerelWriteIntoChannelAllID { get; set; }
+        public static ulong GenerelWriteIntoChannelAdminID { get; set; }
+        public static ulong GenerelReadFromChannelAllID { get; set; }
+        public static ulong GenerelReadFromChannelAdminID { get; set; }
+
 
         public CommandHeader()
         {
@@ -34,17 +37,22 @@ namespace Lilac_x3_Bot.Commands
             this.Prefix = pre.GetPrefix();
 
             //this.self = new CommandHeader();
+            // Module 1337
             Feature1337WriteIntoChannelID = this._configXML.GetChannelUID("Feature1337","WriteIntoChannel");
             Feature1337ReadFromChannelID = this._configXML.GetChannelUID("Feature1337", "ReadFromChannel");
-            GenerelWriteIntoChannelID = this._configXML.GetChannelUID("General", "WriteIntoChannel");
-            GenerelReadFromChannelID = this._configXML.GetChannelUID("General", "ReadFromChannel");
-            Listen1337FFromChannelID = this._configXML.GetChannelUID("Feature1337", "Listen1337FromChannel");
+            Feature1337ListenFromChannelID = this._configXML.GetChannelUID("Feature1337", "Listen1337FromChannel");
+            //Module General
+            GenerelWriteIntoChannelAllID = this._configXML.GetChannelUID("General", "WriteIntoChannelAll");
+            GenerelWriteIntoChannelAdminID = this._configXML.GetChannelUID("General", "WriteIntoChannelAdmin");
+            GenerelReadFromChannelAllID = this._configXML.GetChannelUID("General", "ReadFromChannelAll");
+            GenerelReadFromChannelAdminID = this._configXML.GetChannelUID("General", "ReadFromChannelAdmin");
+            
         }
 
-        // For Listen on all General Commands
-        public bool ReadChannelGeneral()
+        // For Listen on General Commands "All"
+        public bool ReadChannelGeneralAll()
         {
-            if (GenerelReadFromChannelID == Context.Channel.Id || GenerelReadFromChannelID == 0)
+            if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAdminID == 0)
             {
                 return true;
             }
@@ -54,9 +62,34 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
-        public bool ReadChannelGeneral(SocketCommandContext context)
+        public bool ReadChannelGeneralAll(SocketCommandContext context)
         {
-            if (GenerelReadFromChannelID == context.Channel.Id || GenerelReadFromChannelID == 0)
+            if (GenerelReadFromChannelAllID == context.Channel.Id || GenerelReadFromChannelAdminID == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // For Listen on General Commands "Admin"
+        public bool ReadChannelGeneralAdmin()
+        {
+            if (GenerelReadFromChannelAdminID == Context.Channel.Id || GenerelReadFromChannelAdminID == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool ReadChannelGeneralAdmin(SocketCommandContext context)
+        {
+            if (GenerelReadFromChannelAdminID == context.Channel.Id || GenerelReadFromChannelAdminID == 0)
             {
                 return true;
             }
@@ -94,7 +127,7 @@ namespace Lilac_x3_Bot.Commands
         // For Listen on all 1337 Counts
         public bool ReadChannel1337Listen(SocketCommandContext context)
         {
-            if (Listen1337FFromChannelID == context.Channel.Id || Listen1337FFromChannelID == 0)
+            if (Feature1337ListenFromChannelID == context.Channel.Id || Feature1337ListenFromChannelID == 0)
             {
                 return true;
             }
@@ -138,43 +171,66 @@ namespace Lilac_x3_Bot.Commands
                 await context.Guild.GetTextChannel(Feature1337WriteIntoChannelID).SendMessageAsync(msg);
             }
         }
-        // Send to General Channel
-        public async Task SendToGeneralChannelAsync(string msg)
+        // Send to General Channel "Admin"
+        public async Task SendToGeneralChannelAdminAsync(string msg)
         {
-            if (GenerelWriteIntoChannelID == 0)
+            if (GenerelWriteIntoChannelAdminID == 0)
             {
                 await Context.Guild.GetTextChannel(Context.Channel.Id).SendMessageAsync(msg);
             }
             else
             {
-                await Context.Guild.GetTextChannel(GenerelWriteIntoChannelID).SendMessageAsync(msg);
+                await Context.Guild.GetTextChannel(GenerelWriteIntoChannelAdminID).SendMessageAsync(msg);
             }
         }
-        public async Task SendToGeneralChannelAsync(string msg, SocketCommandContext context)
+        public async Task SendToGeneralChannelAdminAsync(string msg, SocketCommandContext context)
         {
-            if (GenerelWriteIntoChannelID == 0)
+            if (GenerelWriteIntoChannelAdminID == 0)
             {
                 await context.Guild.GetTextChannel(context.Channel.Id).SendMessageAsync(msg);
             }
             else
             {
-                await context.Guild.GetTextChannel(GenerelWriteIntoChannelID).SendMessageAsync(msg);
+                await context.Guild.GetTextChannel(GenerelWriteIntoChannelAdminID).SendMessageAsync(msg);
+            }
+        }
+        // Send to General Channel "All"
+        public async Task SendToGeneralChannelAllAsync(string msg)
+        {
+            if (GenerelWriteIntoChannelAllID == 0)
+            {
+                await Context.Guild.GetTextChannel(Context.Channel.Id).SendMessageAsync(msg);
+            }
+            else
+            {
+                await Context.Guild.GetTextChannel(GenerelWriteIntoChannelAllID).SendMessageAsync(msg);
+            }
+        }
+        public async Task SendToGeneralChannelAllAsync(string msg, SocketCommandContext context)
+        {
+            if (GenerelWriteIntoChannelAllID == 0)
+            {
+                await context.Guild.GetTextChannel(context.Channel.Id).SendMessageAsync(msg);
+            }
+            else
+            {
+                await context.Guild.GetTextChannel(GenerelWriteIntoChannelAllID).SendMessageAsync(msg);
             }
         }
 
         public async Task RestartBot()
         {
-            await SendToGeneralChannelAsync("Ich starte kurz neu! Bitte gib mir einen kleinen moment. Dein Meow 1337 Bot <3");
+            await this.SendToGeneralChannelAdminAsync("Ich starte kurz neu! Bitte gib mir einen kleinen moment. Dein Meow 1337 Bot <3");
             for (int i = 5; i >= 0; i--)
             {
                 if (i > 0)
                 {
-                    await SendToGeneralChannelAsync("Noch " + i.ToString() + " sec.");
+                    await this.SendToGeneralChannelAdminAsync("Noch " + i.ToString() + " sec.");
                     
                 }
                 else if (i == 0)
                 {
-                    await SendToGeneralChannelAsync("Bis gleich o/");
+                    await this.SendToGeneralChannelAdminAsync("Bis gleich o/");
                 }
                 Thread.Sleep(1000);
             }
@@ -213,7 +269,7 @@ namespace Lilac_x3_Bot.Commands
                 // check is exact one argument
                 if (countArgs.Length != 1)
                 {
-                    await SendToGeneralChannelAsync("Zu viele Agumente! Bitte `" + Prefix + commandname + " <channelid>` angeben.");
+                    await this.SendToGeneralChannelAdminAsync("Zu viele Agumente! Bitte `" + Prefix + commandname + " <channelid>` angeben.");
 
                 }
                 else
@@ -226,7 +282,7 @@ namespace Lilac_x3_Bot.Commands
                     }
                     catch (Exception)
                     {
-                        await SendToGeneralChannelAsync("Die ID besteht nicht nur aus Zahlen!");
+                        await this.SendToGeneralChannelAdminAsync("Die ID besteht nicht nur aus Zahlen!");
                         return;
                     }
 
@@ -249,25 +305,66 @@ namespace Lilac_x3_Bot.Commands
                         config.ChangeWriteIntoChannelID(ulongID, modul, modulID);
                         if (ulongID == 0)
                         {
-                            await SendToGeneralChannelAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
-                            await SendToGeneralChannelAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
+                            await this.SendToGeneralChannelAdminAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
+                            await this.SendToGeneralChannelAdminAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
                         }
                         else
                         {
-                            await SendToGeneralChannelAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
+                            await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
                             "` wurde für das Modul `"+ modul +"` gesetzt.");
                         }
                     }
                     else
                     {
-                        await SendToGeneralChannelAsync("Der Channel existiert nicht.");
+                        await this.SendToGeneralChannelAdminAsync("Der Channel existiert nicht.");
                     }
                 }
             }
             else
             {
-                await SendToGeneralChannelAsync("Du hast zu wenig Argumente angebene. Bitte nutze den Befehl wie folgt: `" + Prefix + commandname + " <channelid>`");
+                await this.SendToGeneralChannelAdminAsync("Du hast zu wenig Argumente angebene. Bitte nutze den Befehl wie folgt: `" + Prefix + commandname + " <channelid>`");
             }
+        }
+
+        public StringBuilder HeaderCommandsList(StringBuilder str)
+        {
+            str.AppendLine(Context.User.Mention + " Kommando Liste\n");
+            return str;
+        }
+
+        public StringBuilder GeneralAllCommandsList(StringBuilder str)
+        {
+            str.AppendLine(">>> __Berechtigung: Für Alle | Modul: General__");
+            str.AppendLine("`" + this.Prefix + "commands` Eine Liste voller Kommandos.");
+            str.AppendLine("`" + this.Prefix + "moduls` Eine Liste von Modulen und deren Berechtigungsgruppen.");
+            str.AppendLine("`" + this.Prefix + "credits` Zeigt die Credits an.");
+            str.AppendLine();
+            return str;
+        }
+
+        public StringBuilder GeneralAdminCommandsList(StringBuilder str)
+        {
+            str.AppendLine("__Berechtigung: Nur Serverweite Administratoren | Modul General__");
+            str.AppendLine("`" + this.Prefix + "prefix <prefix>` Hiermit stellst du den Prefix ein (nur 1 Zeichen erlaubt).");
+            str.AppendLine("`" + this.Prefix + "restart` Hiermit wird der Bot neugestartet. Bitte nur verwenden, wenn spezielle Einstellungen wie Prefix geändert wurde oder bei Problemen!");
+            str.AppendLine("`" + this.Prefix + "setoutputchannelgeneral <ChannelID>` Hier soll der Bot alle `Modul General` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
+            str.AppendLine("`" + this.Prefix + "setoutputchannel1337 <ChannelID>` Hier soll der Bot alle `Modul 1337` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
+            str.AppendLine("`" + this.Prefix + "setinputchannelgeneral <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General, bei channelID 0 wird überall gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337commands` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337listen` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
+            return str;
+        }
+
+        public StringBuilder Feature1337AllCommandsList(StringBuilder str)
+        {
+            str.AppendLine("__Berechtigung: Für Alle | Modul 1337__");
+            str.AppendLine("`" + this.Prefix + "1337info` Eine kleine Info zum Feature 1337.");
+            str.AppendLine("`" + this.Prefix + "1337streak` Zeigt deine aktuelle und höchste Streak an.");
+            str.AppendLine("`" + this.Prefix + "1337count` Zeigt deine gesamten gezählten Zählungen seit dato an.");
+            str.AppendLine("`" + this.Prefix + "1337hstreak` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, an.");
+            str.AppendLine("`" + this.Prefix + "1337hcount` Zeigt die Top 10, geordnet nach aktuell gesamten gezählten Zählungen und Namen, an.");
+            str.AppendLine("`" + this.Prefix + "1337highscore` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen an.");
+            return str;
         }
     }
 }
