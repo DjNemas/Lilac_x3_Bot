@@ -15,7 +15,7 @@ Behoben: Bot gab eine Nachricht aus, wenn User wiederholt beim Feature 1337 gez�
 Bekannt: In einigen Textausgaben, fehlen noch Emotes.
 
 Next Steps:
-Geplant: T채gliches Backup der Datenbank
+Geplant: T채gliches Backup der Datenbank.
 Geplant: Log in Datei schreiben f체r zuk체nftige Bugs und 체berpr체fungen der Z채hlungen.
 Neues Feature: Bot gibt ein Ergebnis der t채glichen Z채hlungen aus.
 Neues Feature: Highscoreliste Variable aufrufen um x User anzuzeigen. (Limit vermutlich 20 - 30 User)
