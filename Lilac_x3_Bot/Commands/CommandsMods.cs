@@ -87,11 +87,11 @@ namespace Lilac_x3_Bot.Commands
                         "Counter Longest Streak: `" + countArgs[2] + "`\n" +
                         "Counter Alltime: `" + countArgs[3] + "`\n" +
                         "Date Last: `" + countArgs[4] + "`");
+                    t.CWLTextColor("User: " + Context.Guild.GetUser(Convert.ToUInt64(countArgs[0])).Username + " wurde von " + Context.User.Username + " mit der ID " + Context.User.Id + " editiert.", ConsoleColor.Yellow);
                 }
                 else
                 {
                     await SendToGeneralChannelAdminAsync("Du hast keine Berechtigung. Du musst im besitz der `" + Context.Guild.GetRole(ModRoleID).Name + "` Rolle sein.");
-                    t.CWLTextColor("User: " + Context.Guild.GetUser(Convert.ToUInt64(countArgs[0])).Username + " wurde von " + Context.User.Username + " mit der ID " + Context.User.Id + " editiert.", ConsoleColor.Yellow);
                 }
             }
         }
