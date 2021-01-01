@@ -35,7 +35,7 @@ namespace Lilac_x3_Bot.Commands
 
             if (args == null)
             {
-                await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Du hast zu wenige Argumente angebene. Bitte nutze den Befehl wie folgt: `" +
+                await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt: `" +
                     this.Prefix + "commands <Modul> <Berechtigungsgruppe>`");
                 return;
             }
@@ -120,7 +120,7 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("Geändert: `" + this.Prefix + "commands` muss jetzt mit `" + this.Prefix + "commands <ModulName> <Berechtigungsgruppe>` aufgerufen werden.");
             str.AppendLine("Bugfixes (siehe Bufixes und bekannte Bugs).");
             str.AppendLine();
-            str.AppendLine("__Bufixes und bekannte Bugs:__");
+            str.AppendLine("__Bugfixes und bekannte Bugs:__");
             str.AppendLine("Behoben: Wenn man den Prefix geändert hat, wurden die Prefixes beim Command `" + this.Prefix + "commands` nicht übernommen.");
             str.AppendLine("Behoben: Beim wechsel vom Prefix, wurde bei Usern die nicht Autorisiert für ein Command sind, eine falsche Fehlermeldung ausgegeben.");
             str.AppendLine("Behoben: Bot gab eine Nachricht aus, wenn User wiederholt beim Feature 1337 gezählt wurden.");

@@ -107,7 +107,7 @@ namespace Lilac_x3_Bot.Service
                         , context);
 
                     }
-                    if (currentCommand.privileg == Privilegs.ServerAdministrator)
+                    if (currentCommand.privileg == Privilegs.ServerAdministrator || currentCommand.privileg == Privilegs.ModRole)
                     {
                         bool check = _header.ReadChannelGeneralAdmin(context);
                         if (!check) return;
@@ -192,6 +192,22 @@ namespace Lilac_x3_Bot.Service
             version.privilegName = "All";
             version.module = Module.General;
             commandsWithPrivilegs.Add(version);
+
+            // Add EditUser Command
+            var edituser = new CommandsWithPrivilegs();
+            edituser.prefix = this._prefix + "edituser";
+            edituser.privileg = Privilegs.ModRole;
+            edituser.privilegName = "ModRole";
+            edituser.module = Module.General;
+            commandsWithPrivilegs.Add(edituser);
+
+            // Add ModRoleID Command
+            var setmodroleid = new CommandsWithPrivilegs();
+            setmodroleid.prefix = this._prefix + "setmodroleid";
+            setmodroleid.privileg = Privilegs.ServerAdministrator;
+            setmodroleid.privilegName = "Serverweit Administrator";
+            setmodroleid.module = Module.General;
+            commandsWithPrivilegs.Add(setmodroleid);
 
             // Add setoutputchannelgeneralall Command
             var setoutputchannelgeneralall = new CommandsWithPrivilegs();
@@ -311,7 +327,7 @@ namespace Lilac_x3_Bot.Service
         public enum Privilegs
         {
             ServerAdministrator,
-            ChannelManageChannel,
+            ModRole,
             All
         }
 

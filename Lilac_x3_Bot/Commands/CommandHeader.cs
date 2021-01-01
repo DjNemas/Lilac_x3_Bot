@@ -27,6 +27,8 @@ namespace Lilac_x3_Bot.Commands
         public static ulong GenerelReadFromChannelAllID { get; set; }
         public static ulong GenerelReadFromChannelAdminID { get; set; }
 
+        public static ulong ModRoleID { get; set; }
+
 
         public CommandHeader()
         {
@@ -46,7 +48,9 @@ namespace Lilac_x3_Bot.Commands
             GenerelWriteIntoChannelAdminID = this._configXML.GetChannelUID("General", "WriteIntoChannelAdmin");
             GenerelReadFromChannelAllID = this._configXML.GetChannelUID("General", "ReadFromChannelAll");
             GenerelReadFromChannelAdminID = this._configXML.GetChannelUID("General", "ReadFromChannelAdmin");
-            
+            // ModRoleID
+            ModRoleID = this._configXML.GetChannelUID("General", "ModRoleID");
+
         }
 
         // For Listen on General Commands "All"
@@ -270,7 +274,6 @@ namespace Lilac_x3_Bot.Commands
                 if (countArgs.Length != 1)
                 {
                     await this.SendToGeneralChannelAdminAsync("Zu viele Agumente! Bitte `" + Prefix + commandname + " <channelid>` angeben.");
-
                 }
                 else
                 {
@@ -288,8 +291,19 @@ namespace Lilac_x3_Bot.Commands
 
                     // check if channel id exist
                     var allChannel = Context.Guild.Channels;
+                    var allRoles = Context.Guild.Roles;
                     bool exist = false;
+                    // Check all Channel IDs
                     foreach (var item in allChannel)
+                    {
+                        if (ulongID == item.Id)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    // Check all Roles IDs
+                    foreach (var item in allRoles)
                     {
                         if (ulongID == item.Id)
                         {
@@ -305,18 +319,34 @@ namespace Lilac_x3_Bot.Commands
                         config.ChangeWriteIntoChannelID(ulongID, modul, modulID);
                         if (ulongID == 0)
                         {
-                            await this.SendToGeneralChannelAdminAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
-                            await this.SendToGeneralChannelAdminAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
+                            if (modulID == "ModRoleID")
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Die ModRole wurde zurück gesetzt.");
+                            }
+                            else
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
+                                await this.SendToGeneralChannelAdminAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
+                            }
+                            
                         }
                         else
                         {
-                            await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
-                            "` wurde für das Modul `"+ modul + " " + group + "` gesetzt.");
+                            if (modulID == "ModRoleID")
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Du hast die ModRole `" + Context.Guild.GetRole(ulongID) +  "` gesetzt");
+                            }
+                            else
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
+                                "` wurde für das Modul `" + modul + " " + group + "` gesetzt.");
+                            }
+                                
                         }
                     }
                     else
                     {
-                        await this.SendToGeneralChannelAdminAsync("Der Channel existiert nicht.");
+                        await this.SendToGeneralChannelAdminAsync("Diese ID existiert nicht.");
                     }
                 }
             }
@@ -353,8 +383,9 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "setoutputchannelgeneraladmin <ChannelID>` Hier soll der Bot alle `Modul General Admin` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
             str.AppendLine("`" + this.Prefix + "setinputchannelgeneraladmin <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General Admin, bei channelID 0 wird überall gelauscht.");
             str.AppendLine("`" + this.Prefix + "setoutputchannel1337 <ChannelID>` Hier soll der Bot alle `Modul 1337` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
-            str.AppendLine("`" + this.Prefix + "setinputchannel1337commands` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
-            str.AppendLine("`" + this.Prefix + "setinputchannel1337listen` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337commands <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337listen <ChannelID>` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setmodroleid <RoleID>` Hiermit wird die ModRole festgelegt, mit der Mod Commands genutzt werden können.");
             return str;
         }
 

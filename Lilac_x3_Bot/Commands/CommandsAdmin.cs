@@ -18,7 +18,7 @@ namespace Lilac_x3_Bot.Commands
 
             if (args == null)
             {
-                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angebene. Bitte nutze den Befehl wie folgt: `" +
+                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt: `" +
                     this.Prefix + "commands <Modul> <Berechtigungsgruppe>`");
                 return;
             }
@@ -187,6 +187,16 @@ namespace Lilac_x3_Bot.Commands
             bool check = this.ReadChannelGeneralAdmin();
             if (!check) return;
             await this.SetOutputID(args, "setinputchannel1337read", "Feature1337", "Listen", "Listen1337FromChannel");
+        }
+
+        [Command("setmodroleid")]
+        [RequireUserPermission(GuildPermission.Administrator)]
+        public async Task SetModRoleIDAsync([Remainder] string args = null)
+        {
+            // return if its not the Modul Channel ID or 0
+            bool check = this.ReadChannelGeneralAdmin();
+            if (!check) return;
+            await this.SetOutputID(args, "setmodroleid", "General", "Admin", "ModRoleID");
         }
     }
 }
