@@ -66,17 +66,57 @@ namespace Lilac_x3_Bot.Commands
                     Table1337 updateUser;
                     try
                     {
-                        updateUser = dbTable.Table1337.Single((item) => item.userid == Convert.ToUInt64(countArgs[0]));
+                        // Check if UserID is number
+                        ulong userID = 0;
+                        try
+                        {
+                            userID = Convert.ToUInt64(countArgs[0]);
+                        }
+                        catch (Exception)
+                        {
+                            await SendToGeneralChannelAdminAsync("<UserID> war keine Zahl!");
+                            return;
+                        }
+                        // Get User from Database
+                        updateUser = dbTable.Table1337.Single((item) => item.userid == userID);
                     }
                     catch (Exception e)
                     {
                         await SendToGeneralChannelAdminAsync("Es wurde kein User mit der ID: " + countArgs[0] + " gefunden");
                         return;
                     }
-                                        
-                    updateUser.counter_streak = Convert.ToInt32(countArgs[1]);
-                    updateUser.counter_longest_streak = Convert.ToInt32(countArgs[2]);
-                    updateUser.counter_all = Convert.ToInt32(countArgs[3]);
+                    // Check If args are Numbers
+                    // <Counter_Streak>
+                    try
+                    {
+                        updateUser.counter_streak = Convert.ToUInt32(countArgs[1]);
+                    }
+                    catch (Exception e)
+                    {
+                        await SendToGeneralChannelAdminAsync("Meow:\n" + e);
+                        await SendToGeneralChannelAdminAsync("<Counter_Streak> war keine Positive Zahl!");
+                        return;
+                    }
+                    // <Counter_Highest_Streak>
+                    try
+                    {
+                        updateUser.counter_longest_streak = Convert.ToUInt32(countArgs[2]);
+                    }
+                    catch (Exception)
+                    {
+                        await SendToGeneralChannelAdminAsync("<Counter_Highest_Streak> war keine Positive Zahl!");
+                        return;
+                    }
+                    try
+                    {
+                        updateUser.counter_all = Convert.ToUInt32(countArgs[3]);
+                    }
+                    catch (Exception)
+                    {
+                        await SendToGeneralChannelAdminAsync("<CounterAll> war keine Positive Zahl!");
+                        return;
+                    }
+                    
                     updateUser.date_last = countArgs[4];
                     dbTable.SubmitChanges();
                     db.Close();

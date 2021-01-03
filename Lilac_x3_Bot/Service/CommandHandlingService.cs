@@ -92,7 +92,7 @@ namespace Lilac_x3_Bot.Service
                 }
             }
 
-            if (result.Error.HasValue && currentCommand.prefix == splitedMsg[0])
+            if (result.Error.HasValue && currentCommand.prefix == splitedMsg[0] && result.Error == CommandError.UnmetPrecondition)
             {
                 if (currentCommand.module == Module.General)
                 {
@@ -128,15 +128,18 @@ namespace Lilac_x3_Bot.Service
                     "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
                     , context);
                 }
-
             }
-            if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
+            else if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
             {
                 await this._header.SendToGeneralChannelAllAsync(result.ToString(), context);
             }
+            else if (result.Error.HasValue)
+            {
+                await this._header.SendToGeneralChannelAllAsync("Every not Handles Exeption by Bot Developer" + result.ToString(), context);
+            }
         }
 
-        public void AddAbonents(Func<SocketMessage,Task> AddMessageReceived)
+        public void AddAbonents(Func<SocketMessage, Task> AddMessageReceived)
         {
             this._client.MessageReceived += AddMessageReceived;
         }

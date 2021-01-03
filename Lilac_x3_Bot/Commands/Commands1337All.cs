@@ -30,8 +30,8 @@ namespace Lilac_x3_Bot.Commands
             }
             else 
             {
-                int count_streak = 0;
-                int counter_longest_streak = 0;
+                uint count_streak = 0;
+                uint counter_longest_streak = 0;
                 foreach (var item in streakQuery)
                 {
                     count_streak = item.counter_streak;
@@ -55,7 +55,7 @@ namespace Lilac_x3_Bot.Commands
                               where user.userid == Context.User.Id
                               select user;
 
-            int countAll = 0;
+            uint countAll = 0;
             string date_begin = "";
             string date_last = "";
             foreach (var item in streakQuery)

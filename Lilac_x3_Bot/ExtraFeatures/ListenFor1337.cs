@@ -32,6 +32,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
             this._client = client;
             this._command = command;
             this._command.AddAbonents(Message1337);
+            //PostDaylieStats();
         }
 
         private async Task Message1337(SocketMessage rawMessage)
@@ -43,7 +44,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
             var context = new SocketCommandContext(this._client, message);
             bool check = _c.ReadChannel1337Listen(context);
             if (!check) return;
-            
+
             // Get Time to Check if we are on right time and prepare the string for it
             string timeNowAsString = DateTime.Now.ToLongTimeString();
             //string timeBeginAsString = this.timeBegin.ToLongTimeString();
@@ -51,7 +52,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
             int timeNowAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeNowAsString, ':'));
             //int timeBeginAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeBeginAsString, ':'));
             //int timeEndAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeEndAsString, ':'));
-            
+
 
             // check if message contains a mention and get this mention as id to string
             string rolles = " ";
@@ -134,9 +135,9 @@ namespace Lilac_x3_Bot.ExtraFeatures
                                   select table;
 
                     // temp variable for changes
-                    int counter_allQ = 0;
-                    int counter_streakQ = 0;
-                    int counter_logest_streakQ = 0;
+                    uint counter_allQ = 0;
+                    uint counter_streakQ = 0;
+                    uint counter_logest_streakQ = 0;
                     string date_lastQ = " ";
 
                     // get current data from user
@@ -190,10 +191,14 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 }
                 this.db.Close();
             }
-            // Beispiel
-            //await context.Guild.GetTextChannel(325653182736760832).SendMessageAsync(context.Guild.GetUser(message.Author.Id).Nickname + " dein text `" + message + "` wurde gezählt.");
-            //await context.Channel.SendMessageAsync(context.Guild.GetUser(message.Author.Id).Nickname + " dein text `" + message + "` wurde gezählt.");
-
         }
+
+        //private void PostDaylieStats()
+        //{
+        //    Task.Run(() => 
+        //    {
+        //        // Continue here
+        //    });
+        //}
     }
 }

@@ -93,7 +93,7 @@ namespace Lilac_x3_Bot
             return Task.CompletedTask;
         }
 
-        // Write every msg depends on LogSeverity Level (enum)
+        //Write every msg depends on LogSeverity Level(enum)
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
