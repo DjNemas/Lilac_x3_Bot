@@ -34,7 +34,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
             this._client = client;
             this._command = command;
             this._command.AddAbonents(Message1337);
-            // Bot Respons after Event ends each day
         }
 
         private async Task Message1337(SocketMessage rawMessage)
@@ -197,7 +196,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
         public async Task PostDaylieStats(SocketGuild guild)
 #pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
         {
-            Console.WriteLine("Bin gejoined");
 #pragma warning disable CS4014 // Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
             Task.Run(async () =>
             {
