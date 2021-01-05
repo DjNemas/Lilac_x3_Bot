@@ -129,13 +129,13 @@ namespace Lilac_x3_Bot.Service
                     , context);
                 }
             }
-            else if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
+            else if (result.Error.HasValue && result.Error.Value == CommandError.UnknownCommand)
             {
-                await this._header.SendToGeneralChannelAllAsync(result.ToString(), context);
+                await this._header.SendToGeneralChannelAllAsync("Solch ein Command kenne ich nicht. :sob:", context);
             }
             else if (result.Error.HasValue)
             {
-                await this._header.SendToGeneralChannelAllAsync("Every not Handles Exeption by Bot Developer" + result.ToString(), context);
+                await this._header.SendToGeneralChannelAllAsync("Every Exeption that is not Handled by Bot Developer: `" + result.ToString() + "`\n**Pls contact the Developer!**", context);
             }
         }
 
