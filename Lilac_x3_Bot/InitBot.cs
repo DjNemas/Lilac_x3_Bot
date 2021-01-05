@@ -66,6 +66,7 @@ namespace Lilac_x3_Bot
 
             this._client.Log += Log;
             this._client.UserJoined += UserJoined;
+            this._client.GuildAvailable += _listenFor1337.PostDaylieStats;
 
             if (this._configXML != null)
             {

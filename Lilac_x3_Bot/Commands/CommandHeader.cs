@@ -29,7 +29,6 @@ namespace Lilac_x3_Bot.Commands
 
         public static ulong ModRoleID { get; set; }
 
-
         public CommandHeader()
         {
             InitBot init = new InitBot();
@@ -53,8 +52,13 @@ namespace Lilac_x3_Bot.Commands
 
         }
 
+        public ulong GetFeature1337ListenFromChannelID() 
+        {
+            return Feature1337ListenFromChannelID; 
+        }
+
         // For Listen on General Commands "All"
-        public bool ReadChannelGeneralAll()
+            public bool ReadChannelGeneralAll()
         {
             if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAllID == 0)
             {
