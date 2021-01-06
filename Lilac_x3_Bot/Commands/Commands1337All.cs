@@ -127,6 +127,15 @@ namespace Lilac_x3_Bot.Commands
                                   orderby user.counter_streak descending, user.username ascending
                                   select user;
 
+                foreach (var item in streakQuery)
+                {
+                    Console.WriteLine("test");
+                    if (item.userid == 153341167478636546)
+                    {
+                        t.CWLTextColor("Username: " + item.username, ConsoleColor.Red);
+                    }
+                }
+
                 if (streakQuery.Count() == 0)
                 {
                     await SendTo1337ChannelAsync(Context.User.Mention + " Noch keine Daten vorhanden. ");
