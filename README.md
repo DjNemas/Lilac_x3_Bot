@@ -3,6 +3,7 @@ Bot für Lilac_x3 Discord Server
 
 ## Aktuelle Version: Version 1.1
 
+## Version 1.1
 ## Neu in dieser Version:
 - Neu: =version, =credits und =moduls.
 - Geändert: =commands muss jetzt mit =commands <ModulName> <Berechtigungsgruppe> aufgerufen werden.  
