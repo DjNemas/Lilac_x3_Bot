@@ -1,8 +1,10 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
 using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.Database.Tables;
 using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Lilac_x3_Bot.Commands
@@ -213,5 +215,6 @@ namespace Lilac_x3_Bot.Commands
 
             }
         }
+
     }
 }

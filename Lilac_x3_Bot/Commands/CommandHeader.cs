@@ -226,6 +226,7 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
+        // Restarts the Bot
         public async Task RestartBot()
         {
             await this.SendToGeneralChannelAdminAsync("Ich starte kurz neu! Bitte gib mir einen kleinen moment. Dein Meow 1337 Bot <3");
@@ -268,6 +269,7 @@ namespace Lilac_x3_Bot.Commands
             Environment.Exit(0);
         }
 
+        // Set ID in config File
         public async Task SetOutputID(string args, string commandname, string modul, string group, string modulID)
         {
             // need a argument
@@ -360,12 +362,14 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
+        // Commandlist Header
         public StringBuilder HeaderCommandsList(StringBuilder str)
         {
             str.AppendLine(Context.User.Mention + " Kommando Liste\n");
             return str;
         }
 
+        // Commandlist Modul: General | Permission: ALL
         public StringBuilder GeneralAllCommandsList(StringBuilder str)
         {
             str.AppendLine(">>> __Berechtigung: Für Alle | Modul: General__");
@@ -377,6 +381,16 @@ namespace Lilac_x3_Bot.Commands
             return str;
         }
 
+        // Commandlist Modul: General | Permission: Mod
+        public StringBuilder GeneralModCommandsList(StringBuilder str)
+        {
+            str.AppendLine("__Berechtigung: Moderatoren Rolle | Modul General__");
+            str.AppendLine("`" + this.Prefix + "showuser <userid>` Gibt alle 1337 Stats für den angegebenen User aus.");
+            str.AppendLine("`" + this.Prefix + "edituser <UserID> <Counter_Streak> <Counter_Highest_Streak> <CounterAll> <Last_Date>` Ermöglicht das Editieren der Stats vom angegebenen User.");
+            return str;
+        }
+
+        // Commandlist Modul: General | Permission: Admin
         public StringBuilder GeneralAdminCommandsList(StringBuilder str)
         {
             str.AppendLine("__Berechtigung: Nur Serverweite Administratoren | Modul General__");
@@ -393,6 +407,7 @@ namespace Lilac_x3_Bot.Commands
             return str;
         }
 
+        // Commandlist Modul: 1337 | Permission: ALL
         public StringBuilder Feature1337AllCommandsList(StringBuilder str)
         {
             str.AppendLine("__Berechtigung: Für Alle | Modul 1337__");
@@ -401,7 +416,7 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "1337count` Zeigt deine gesamten gezählten Zählungen seit dato an.");
             str.AppendLine("`" + this.Prefix + "1337hstreak` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, an.");
             str.AppendLine("`" + this.Prefix + "1337hcount` Zeigt die Top 10, geordnet nach aktuell gesamten gezählten Zählungen und Namen, an.");
-            str.AppendLine("`" + this.Prefix + "1337highscore` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen an.");
+            str.AppendLine("`" + this.Prefix + "1337highscore <Anzahl User (1-30)>` Zeigt die Anzahl User, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen, als Highscoreliste an.");
             return str;
         }
     }

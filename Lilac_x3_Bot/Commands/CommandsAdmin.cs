@@ -41,7 +41,7 @@ namespace Lilac_x3_Bot.Commands
                         this.Prefix + "moduls um eine Liste der Module zu erhalten.");
                     return;
                 }
-                if (countArgs[1] != "all" && countArgs[1] != "admin")
+                if (countArgs[1] != "all" && countArgs[1] != "admin" && countArgs[1] != "mod")
                 {
                     await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Falsche Berechtigungsgruppe\nBitte nutze " +
                         this.Prefix + "moduls um eine Liste der Berechtigungsgruppen zu erhalten.");
@@ -52,6 +52,13 @@ namespace Lilac_x3_Bot.Commands
                     var str = new StringBuilder();
                     str = HeaderCommandsList(str);
                     str = GeneralAllCommandsList(str);
+                    await this.SendToGeneralChannelAdminAsync(str.ToString());
+                }
+                if (countArgs[0] == "general" && countArgs[1] == "mod")
+                {
+                    var str = new StringBuilder();
+                    str = HeaderCommandsList(str);
+                    str = GeneralModCommandsList(str);
                     await this.SendToGeneralChannelAdminAsync(str.ToString());
                 }
                 if (countArgs[0] == "general" && countArgs[1] == "admin")

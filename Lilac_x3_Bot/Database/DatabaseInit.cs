@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lilac_x3_Bot.Database.Backup;
+using System;
 using System.Data.SQLite;
 
 namespace Lilac_x3_Bot.Database
@@ -7,12 +8,19 @@ namespace Lilac_x3_Bot.Database
     {
         //member
         string pathDB = @"database.db";
+        private static bool backupTaskRunning = false;
         SQLiteConnection connection;
         Tools t = new Tools();
 
         public DatabaseInit()
         {
             this.CreateDBWIthTables();
+            // Starts the Backup Task for DB
+            if (!backupTaskRunning)
+            {
+                BackupDB db = new BackupDB();
+                backupTaskRunning = true;
+            }
         }
 
         public SQLiteConnection connect()
