@@ -92,7 +92,7 @@ namespace Lilac_x3_Bot.Service
                 }
             }
 
-            if (result.Error.HasValue && currentCommand.prefix == splitedMsg[0])
+            if (result.Error.HasValue && currentCommand.prefix == splitedMsg[0] && result.Error == CommandError.UnmetPrecondition)
             {
                 if (currentCommand.module == Module.General)
                 {
@@ -107,7 +107,7 @@ namespace Lilac_x3_Bot.Service
                         , context);
 
                     }
-                    if (currentCommand.privileg == Privilegs.ServerAdministrator)
+                    if (currentCommand.privileg == Privilegs.ServerAdministrator || currentCommand.privileg == Privilegs.ModRole)
                     {
                         bool check = _header.ReadChannelGeneralAdmin(context);
                         if (!check) return;
@@ -128,15 +128,18 @@ namespace Lilac_x3_Bot.Service
                     "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
                     , context);
                 }
-
             }
-            if (result.Error.HasValue && result.Error.Value != CommandError.UnknownCommand)
+            else if (result.Error.HasValue && result.Error.Value == CommandError.UnknownCommand)
             {
-                await this._header.SendToGeneralChannelAllAsync(result.ToString(), context);
+                await this._header.SendToGeneralChannelAllAsync("Solch ein Command kenne ich nicht. :sob:", context);
+            }
+            else if (result.Error.HasValue)
+            {
+                await this._header.SendToGeneralChannelAllAsync("Every Exeption that is not Handled by Bot Developer: `" + result.ToString() + "`\n**Pls contact the Developer!**", context);
             }
         }
 
-        public void AddAbonents(Func<SocketMessage,Task> AddMessageReceived)
+        public void AddAbonents(Func<SocketMessage, Task> AddMessageReceived)
         {
             this._client.MessageReceived += AddMessageReceived;
         }
@@ -192,6 +195,30 @@ namespace Lilac_x3_Bot.Service
             version.privilegName = "All";
             version.module = Module.General;
             commandsWithPrivilegs.Add(version);
+
+            // Add EditUser Command
+            var edituser = new CommandsWithPrivilegs();
+            edituser.prefix = this._prefix + "edituser";
+            edituser.privileg = Privilegs.ModRole;
+            edituser.privilegName = "ModRole";
+            edituser.module = Module.General;
+            commandsWithPrivilegs.Add(edituser);
+
+            // Add ShowUser Command
+            var showuser = new CommandsWithPrivilegs();
+            showuser.prefix = this._prefix + "showuser";
+            showuser.privileg = Privilegs.ModRole;
+            showuser.privilegName = "ModRole";
+            showuser.module = Module.General;
+            commandsWithPrivilegs.Add(showuser);
+
+            // Add ModRoleID Command
+            var setmodroleid = new CommandsWithPrivilegs();
+            setmodroleid.prefix = this._prefix + "setmodroleid";
+            setmodroleid.privileg = Privilegs.ServerAdministrator;
+            setmodroleid.privilegName = "Serverweit Administrator";
+            setmodroleid.module = Module.General;
+            commandsWithPrivilegs.Add(setmodroleid);
 
             // Add setoutputchannelgeneralall Command
             var setoutputchannelgeneralall = new CommandsWithPrivilegs();
@@ -311,7 +338,7 @@ namespace Lilac_x3_Bot.Service
         public enum Privilegs
         {
             ServerAdministrator,
-            ChannelManageChannel,
+            ModRole,
             All
         }
 

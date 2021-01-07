@@ -12,11 +12,20 @@
     <PackageTags>Discord,Bot,DjNemas,c sharp,c#</PackageTags>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="CommandHandler.cs~RF99920f6.TMP" />
+    <None Remove="Commands\Commands1337All.cs~RF19b2674a.TMP" />
     <None Remove="ConfigXML.cs~RF5115445.TMP" />
     <None Remove="ExtraFeatures\ListenFor1337.cs~RF662a4.TMP" />
     <None Remove="Program.cs~RF468b3ef.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>

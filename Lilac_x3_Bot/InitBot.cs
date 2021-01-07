@@ -16,7 +16,7 @@ namespace Lilac_x3_Bot
     {
         // DevMode Member
         public bool _devMode = false;
-        private string _version = "Version 1.1";
+        private string _version = "Version 1.2";
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
@@ -27,6 +27,7 @@ namespace Lilac_x3_Bot
         private XDocument _configXML;
         public async Task MainAsync()
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             // New Client
             // Load config.xml if doesn't exist create one. Both with exception handling.
             this._configXML = this.configClass.LoadConfigXML();
@@ -66,6 +67,7 @@ namespace Lilac_x3_Bot
 
             this._client.Log += Log;
             this._client.UserJoined += UserJoined;
+            this._client.GuildAvailable += _listenFor1337.PostDaylieStats;
 
             if (this._configXML != null)
             {
@@ -93,7 +95,7 @@ namespace Lilac_x3_Bot
             return Task.CompletedTask;
         }
 
-        // Write every msg depends on LogSeverity Level (enum)
+        //Write every msg depends on LogSeverity Level(enum)
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());

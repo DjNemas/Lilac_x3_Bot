@@ -27,6 +27,7 @@ namespace Lilac_x3_Bot.Commands
         public static ulong GenerelReadFromChannelAllID { get; set; }
         public static ulong GenerelReadFromChannelAdminID { get; set; }
 
+        public static ulong ModRoleID { get; set; }
 
         public CommandHeader()
         {
@@ -46,11 +47,18 @@ namespace Lilac_x3_Bot.Commands
             GenerelWriteIntoChannelAdminID = this._configXML.GetChannelUID("General", "WriteIntoChannelAdmin");
             GenerelReadFromChannelAllID = this._configXML.GetChannelUID("General", "ReadFromChannelAll");
             GenerelReadFromChannelAdminID = this._configXML.GetChannelUID("General", "ReadFromChannelAdmin");
-            
+            // ModRoleID
+            ModRoleID = this._configXML.GetChannelUID("General", "ModRoleID");
+
+        }
+
+        public ulong GetFeature1337ListenFromChannelID() 
+        {
+            return Feature1337ListenFromChannelID; 
         }
 
         // For Listen on General Commands "All"
-        public bool ReadChannelGeneralAll()
+            public bool ReadChannelGeneralAll()
         {
             if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAllID == 0)
             {
@@ -218,6 +226,7 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
+        // Restarts the Bot
         public async Task RestartBot()
         {
             await this.SendToGeneralChannelAdminAsync("Ich starte kurz neu! Bitte gib mir einen kleinen moment. Dein Meow 1337 Bot <3");
@@ -260,6 +269,7 @@ namespace Lilac_x3_Bot.Commands
             Environment.Exit(0);
         }
 
+        // Set ID in config File
         public async Task SetOutputID(string args, string commandname, string modul, string group, string modulID)
         {
             // need a argument
@@ -270,7 +280,6 @@ namespace Lilac_x3_Bot.Commands
                 if (countArgs.Length != 1)
                 {
                     await this.SendToGeneralChannelAdminAsync("Zu viele Agumente! Bitte `" + Prefix + commandname + " <channelid>` angeben.");
-
                 }
                 else
                 {
@@ -288,8 +297,19 @@ namespace Lilac_x3_Bot.Commands
 
                     // check if channel id exist
                     var allChannel = Context.Guild.Channels;
+                    var allRoles = Context.Guild.Roles;
                     bool exist = false;
+                    // Check all Channel IDs
                     foreach (var item in allChannel)
+                    {
+                        if (ulongID == item.Id)
+                        {
+                            exist = true;
+                            break;
+                        }
+                    }
+                    // Check all Roles IDs
+                    foreach (var item in allRoles)
                     {
                         if (ulongID == item.Id)
                         {
@@ -305,18 +325,34 @@ namespace Lilac_x3_Bot.Commands
                         config.ChangeWriteIntoChannelID(ulongID, modul, modulID);
                         if (ulongID == 0)
                         {
-                            await this.SendToGeneralChannelAdminAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
-                            await this.SendToGeneralChannelAdminAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
+                            if (modulID == "ModRoleID")
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Die ModRole wurde zurück gesetzt.");
+                            }
+                            else
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Der Channel wurde auf Standardeinstellung gesetzt.");
+                                await this.SendToGeneralChannelAdminAsync("Ich Lese und Antworte jetzt immer im selben Channel.");
+                            }
+                            
                         }
                         else
                         {
-                            await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
-                            "` wurde für das Modul `"+ modul + " " + group + "` gesetzt.");
+                            if (modulID == "ModRoleID")
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Du hast die ModRole `" + Context.Guild.GetRole(ulongID) +  "` gesetzt");
+                            }
+                            else
+                            {
+                                await this.SendToGeneralChannelAdminAsync("Der Channel `" + Context.Guild.GetChannel(ulongID).Name +
+                                "` wurde für das Modul `" + modul + " " + group + "` gesetzt.");
+                            }
+                                
                         }
                     }
                     else
                     {
-                        await this.SendToGeneralChannelAdminAsync("Der Channel existiert nicht.");
+                        await this.SendToGeneralChannelAdminAsync("Diese ID existiert nicht.");
                     }
                 }
             }
@@ -326,12 +362,14 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
+        // Commandlist Header
         public StringBuilder HeaderCommandsList(StringBuilder str)
         {
             str.AppendLine(Context.User.Mention + " Kommando Liste\n");
             return str;
         }
 
+        // Commandlist Modul: General | Permission: ALL
         public StringBuilder GeneralAllCommandsList(StringBuilder str)
         {
             str.AppendLine(">>> __Berechtigung: Für Alle | Modul: General__");
@@ -343,6 +381,16 @@ namespace Lilac_x3_Bot.Commands
             return str;
         }
 
+        // Commandlist Modul: General | Permission: Mod
+        public StringBuilder GeneralModCommandsList(StringBuilder str)
+        {
+            str.AppendLine("__Berechtigung: Moderatoren Rolle | Modul General__");
+            str.AppendLine("`" + this.Prefix + "showuser <userid>` Gibt alle 1337 Stats für den angegebenen User aus.");
+            str.AppendLine("`" + this.Prefix + "edituser <UserID> <Counter_Streak> <Counter_Highest_Streak> <CounterAll> <Last_Date>` Ermöglicht das Editieren der Stats vom angegebenen User.");
+            return str;
+        }
+
+        // Commandlist Modul: General | Permission: Admin
         public StringBuilder GeneralAdminCommandsList(StringBuilder str)
         {
             str.AppendLine("__Berechtigung: Nur Serverweite Administratoren | Modul General__");
@@ -353,11 +401,13 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "setoutputchannelgeneraladmin <ChannelID>` Hier soll der Bot alle `Modul General Admin` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
             str.AppendLine("`" + this.Prefix + "setinputchannelgeneraladmin <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul General Admin, bei channelID 0 wird überall gelauscht.");
             str.AppendLine("`" + this.Prefix + "setoutputchannel1337 <ChannelID>` Hier soll der Bot alle `Modul 1337` ausgaben senden. Bei ID 0 kommen die ausgaben immer im selben Chat!");
-            str.AppendLine("`" + this.Prefix + "setinputchannel1337commands` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
-            str.AppendLine("`" + this.Prefix + "setinputchannel1337listen` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337commands <ChannelID>` Der Bot hört nur in dem Channel auf alle Kommandos vom Modul 1337, bei channelID 0 wird überall gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setinputchannel1337listen <ChannelID>` In dem Channel wird nach 1337 und @1337 gelauscht und zählt nur dort mit. Bei channelID 0 wird in jedem Channel gelauscht.");
+            str.AppendLine("`" + this.Prefix + "setmodroleid <RoleID>` Hiermit wird die ModRole festgelegt, mit der Mod Commands genutzt werden können.");
             return str;
         }
 
+        // Commandlist Modul: 1337 | Permission: ALL
         public StringBuilder Feature1337AllCommandsList(StringBuilder str)
         {
             str.AppendLine("__Berechtigung: Für Alle | Modul 1337__");
@@ -366,7 +416,7 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "1337count` Zeigt deine gesamten gezählten Zählungen seit dato an.");
             str.AppendLine("`" + this.Prefix + "1337hstreak` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, an.");
             str.AppendLine("`" + this.Prefix + "1337hcount` Zeigt die Top 10, geordnet nach aktuell gesamten gezählten Zählungen und Namen, an.");
-            str.AppendLine("`" + this.Prefix + "1337highscore` Zeigt die Top 10, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen an.");
+            str.AppendLine("`" + this.Prefix + "1337highscore <Anzahl User (1-30)>` Zeigt die Anzahl User, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen, als Highscoreliste an.");
             return str;
         }
     }

@@ -8,6 +8,7 @@ using Lilac_x3_Bot.Service;
 using System;
 using System.Data.SQLite;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lilac_x3_Bot.ExtraFeatures
@@ -15,7 +16,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
     class ListenFor1337
     {
         // Member
-        bool _devMode;
+        private bool _devMode;
+        private int counterUserPerDay = 0;
         CommandHeader _c = new CommandHeader();
         DiscordSocketClient _client;
         CommandHandlingService _command;
@@ -43,15 +45,10 @@ namespace Lilac_x3_Bot.ExtraFeatures
             var context = new SocketCommandContext(this._client, message);
             bool check = _c.ReadChannel1337Listen(context);
             if (!check) return;
-            
+
             // Get Time to Check if we are on right time and prepare the string for it
             string timeNowAsString = DateTime.Now.ToLongTimeString();
-            //string timeBeginAsString = this.timeBegin.ToLongTimeString();
-            //string timeEndAsString = this.timeEnd.ToLongTimeString();
             int timeNowAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeNowAsString, ':'));
-            //int timeBeginAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeBeginAsString, ':'));
-            //int timeEndAsInt = Convert.ToInt32(t.RemoveSpecificCharFromString(timeEndAsString, ':'));
-            
 
             // check if message contains a mention and get this mention as id to string
             string rolles = " ";
@@ -82,7 +79,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     counterM1337++;
                 }
             }
-
 
             // check if message has 1337 or @1337 ones!
             if (counter1337 == 1 && counterM1337 != 1 || counter1337 != 1 && counterM1337 == 1)
@@ -122,6 +118,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
 
                     dbTable.Table1337.InsertOnSubmit(addNewUser);
                     dbTable.SubmitChanges();
+                    // Counts User for bot respons
+                    counterUserPerDay++;
                     if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                         " Hab dich gezählt :P", context);
                     t.CWLTextColor(DateTime.Now.ToString() + " 2 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
@@ -134,9 +132,9 @@ namespace Lilac_x3_Bot.ExtraFeatures
                                   select table;
 
                     // temp variable for changes
-                    int counter_allQ = 0;
-                    int counter_streakQ = 0;
-                    int counter_logest_streakQ = 0;
+                    uint counter_allQ = 0;
+                    uint counter_streakQ = 0;
+                    uint counter_logest_streakQ = 0;
                     string date_lastQ = " ";
 
                     // get current data from user
@@ -176,6 +174,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
 
                         // send data to database when SubmitChanges() is called.
                         dbTable.SubmitChanges();
+                        // Counts User for bot respons
+                        counterUserPerDay++;
                         if (_devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                             " Hab dich gezählt :P", context);
                         t.CWLTextColor(DateTime.Now.ToString() + " 3 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", ConsoleColor.Yellow);
@@ -190,10 +190,48 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 }
                 this.db.Close();
             }
-            // Beispiel
-            //await context.Guild.GetTextChannel(325653182736760832).SendMessageAsync(context.Guild.GetUser(message.Author.Id).Nickname + " dein text `" + message + "` wurde gezählt.");
-            //await context.Channel.SendMessageAsync(context.Guild.GetUser(message.Author.Id).Nickname + " dein text `" + message + "` wurde gezählt.");
+        }
 
+#pragma warning disable CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
+        public async Task PostDaylieStats(SocketGuild guild)
+#pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
+        {
+#pragma warning disable CS4014 // Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    CommandHeader _c2 = new CommandHeader();
+                    SocketTextChannel textChannel;
+
+                    // Get actual time and time for trigger
+                    DateTime aktuelleZeit = DateTime.Now;
+                    DateTime triggerZeit = new DateTime(aktuelleZeit.Year, aktuelleZeit.Month, aktuelleZeit.Day, 13, 38, 00, 000);
+                    // get the time different to int in millisec
+                    int iTriggerZeit = Convert.ToInt32(triggerZeit.Subtract(aktuelleZeit).TotalMilliseconds);
+                    if (iTriggerZeit < 0)
+                    {
+                        triggerZeit = new DateTime(aktuelleZeit.Year, aktuelleZeit.Month, aktuelleZeit.Day, 13, 38, 00, 000).AddDays(1);
+                        iTriggerZeit = Convert.ToInt32(triggerZeit.Subtract(aktuelleZeit).TotalMilliseconds);
+                    }
+                    // sleep until the respons time is 13:38 each day
+                    Thread.Sleep(iTriggerZeit);
+
+                    // If 1337ChannelID is set
+                    if (_client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) != null)
+                    {
+                        textChannel = (SocketTextChannel)_client.GetChannel(_c2.GetFeature1337ListenFromChannelID());
+                        await textChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <a:poggers:684767963156709376>");
+                    }
+                    // If Channel doesn't exist or 0
+                    else if (_c2.GetFeature1337ListenFromChannelID() == 0 || _client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) == null)
+                    {
+                        await _client.GetGuild(guild.Id).SystemChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <:Pog:655898145963900948>");
+                    }
+                    counterUserPerDay = 0;
+                }
+            });
+#pragma warning restore CS4014 // Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
         }
     }
 }
