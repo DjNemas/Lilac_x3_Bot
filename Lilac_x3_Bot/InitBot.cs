@@ -16,7 +16,7 @@ namespace Lilac_x3_Bot
     {
         // DevMode Member
         public bool _devMode = false;
-        private string _version = "Version 1.1";
+        private string _version = "Version 1.2";
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;

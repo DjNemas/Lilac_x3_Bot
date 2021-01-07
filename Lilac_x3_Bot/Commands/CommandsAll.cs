@@ -6,18 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lilac_x3_Bot.Commands
 {
-
     public class CommandsAll : CommandHeader
     {
-        ///ONLY FOR TESTING
-        //[Command("say")]
-        // public async Task ModulsAsync([Remainder] string args = null)
-        // {
-
-
-        //     await SendToGeneralChannelAllAsync(args);
-        // }
-
         [Command("moduls")]
         public async Task ModulsAsync()
         {
@@ -63,13 +53,13 @@ namespace Lilac_x3_Bot.Commands
             {
                 if (this.ReadChannelGeneralAdmin())
                 {
-                    await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt: `" +
-                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`");
+                    await this.SendToGeneralChannelAdminAsync(Context.User.Mention + "\n>>> Nutze den Befehl wie folgt: `" +
+                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`\nModule können mit `" + this.Prefix + "moduls` angezeigt werden.");
                 }
                 else if (this.ReadChannelGeneralAll())
                 {
-                    await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt: `" +
-                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`");
+                    await this.SendToGeneralChannelAllAsync(Context.User.Mention + "\n>>> Nutze den Befehl wie folgt: `" +
+                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`\nModule können mit `" + this.Prefix + "moduls` angezeigt werden.");
                 }
                 return;
             }
@@ -138,25 +128,8 @@ namespace Lilac_x3_Bot.Commands
             if (!check) return;
 
             var str = new StringBuilder();
-            str.AppendLine(">>> __Aktuelle Version: " + this.Version + "__");
-            str.AppendLine();
-            str.AppendLine("__Neu in dieser Version:__");
-            str.AppendLine("Neu: " + this.Prefix + "version, " + this.Prefix + "credits und " + this.Prefix + "moduls.");
-            str.AppendLine("Geändert: `" + this.Prefix + "commands` muss jetzt mit `" + this.Prefix + "commands <ModulName> <Berechtigungsgruppe>` aufgerufen werden.");
-            str.AppendLine("Bugfixes (siehe Bufixes und bekannte Bugs).");
-            str.AppendLine();
-            str.AppendLine("__Bugfixes und bekannte Bugs:__");
-            str.AppendLine("Behoben: Wenn man den Prefix geändert hat, wurden die Prefixes beim Command `" + this.Prefix + "commands` nicht übernommen.");
-            str.AppendLine("Behoben: Beim wechsel vom Prefix, wurde bei Usern die nicht Autorisiert für ein Command sind, eine falsche Fehlermeldung ausgegeben.");
-            str.AppendLine("Behoben: Bot gab eine Nachricht aus, wenn User wiederholt beim Feature 1337 gezählt wurden.");
-            str.AppendLine("Bekannt: In einigen Textausgaben, fehlen noch Emotes.");
-            str.AppendLine();
-            str.AppendLine("__Next Steps:__");
-            str.AppendLine("Geplant: Tägliches Backup der Datenbank");
-            str.AppendLine("Geplant: Log in Datei schreiben für zukünftige Bugs und überprüfungen der Zählungen.");
-            str.AppendLine("Neues Feature: Bot gibt ein Ergebnis der täglichen Zählungen aus.");
-            str.AppendLine("Neues Feature: Highscoreliste Variable aufrufen um x User anzuzeigen. (Limit vermutlich 20 - 30 User)");
-
+            str.AppendLine(">>> Aktuelle Version: " + this.Version);
+            str.AppendLine("Das Updatelog ist nun hier zu finden: https://github.com/DjNemas/Lilac_x3_Bot");
 
             await this.SendToGeneralChannelAllAsync(str.ToString());
         }
@@ -165,13 +138,13 @@ namespace Lilac_x3_Bot.Commands
         {
             if (countArgs[0] != "general" && countArgs[0] != "1337")
             {
-                await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Falsches Modul\nBitte nutze " +
+                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Falsches Modul\nBitte nutze " +
                     this.Prefix + "moduls um eine Liste der Module zu erhalten.");
                 return;
             }
             if (countArgs[1] != "all" && countArgs[1] != "admin" && countArgs[1] != "mod")
             {
-                await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Falsche Berechtigungsgruppe\nBitte nutze " +
+                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Falsche Berechtigungsgruppe\nBitte nutze " +
                     this.Prefix + "moduls um eine Liste der Berechtigungsgruppen zu erhalten.");
                 return;
             }
@@ -181,18 +154,18 @@ namespace Lilac_x3_Bot.Commands
                 var str = new StringBuilder();
                 str = HeaderCommandsList(str);
                 str = GeneralAllCommandsList(str);
-                await this.SendToGeneralChannelAllAsync(str.ToString());
+                await this.SendToGeneralChannelAdminAsync(str.ToString());
             }
             if (countArgs[0] == "general" && countArgs[1] == "mod")
             {
                 var str = new StringBuilder();
                 str = HeaderCommandsList(str);
                 str = GeneralModCommandsList(str);
-                await this.SendToGeneralChannelAllAsync(str.ToString());
+                await this.SendToGeneralChannelAdminAsync(str.ToString());
             }
             if (countArgs[0] == "general" && countArgs[1] == "admin")
             {
-                await this.SendToGeneralChannelAllAsync(Context.User.Mention + " Du bist nicht berechtigt diese Commandsliste einzusehen.");
+                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Du bist nicht berechtigt diese Commandsliste einzusehen.");
                 return;
             }
             if (countArgs[0] == "1337" && countArgs[1] == "all")
@@ -200,7 +173,7 @@ namespace Lilac_x3_Bot.Commands
                 var str = new StringBuilder();
                 str = HeaderCommandsList(str);
                 str = Feature1337AllCommandsList(str);
-                await this.SendToGeneralChannelAllAsync(str.ToString());
+                await this.SendToGeneralChannelAdminAsync(str.ToString());
             }
         }
 
@@ -252,7 +225,5 @@ namespace Lilac_x3_Bot.Commands
                 await this.SendToGeneralChannelAllAsync(str.ToString());
             }
         }
-
-
     }
 }

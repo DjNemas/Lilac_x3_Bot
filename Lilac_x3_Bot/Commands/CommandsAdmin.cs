@@ -18,8 +18,8 @@ namespace Lilac_x3_Bot.Commands
 
             if (args == null)
             {
-                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt: `" +
-                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`");
+                await this.SendToGeneralChannelAdminAsync(Context.User.Mention + "\n>>> Nutze den Befehl wie folgt: `" +
+                    this.Prefix + "commands <Modul> <Berechtigungsgruppe>`\nModule können mit `" + this.Prefix + "moduls` angezeigt werden.");
                 return;
             }
             args = args.ToLower();

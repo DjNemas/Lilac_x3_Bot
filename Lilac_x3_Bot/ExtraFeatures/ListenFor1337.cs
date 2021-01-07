@@ -221,7 +221,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     if (_client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) != null)
                     {
                         textChannel = (SocketTextChannel)_client.GetChannel(_c2.GetFeature1337ListenFromChannelID());
-                        await textChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <:Pog:655898145963900948>");
+                        await textChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <a:poggers:684767963156709376>");
                     }
                     // If Channel doesn't exist or 0
                     else if (_c2.GetFeature1337ListenFromChannelID() == 0 || _client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) == null)
