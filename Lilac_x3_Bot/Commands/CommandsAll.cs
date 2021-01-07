@@ -103,12 +103,10 @@ namespace Lilac_x3_Bot.Commands
             {
                 if (this.ReadChannelGeneralAdmin() && memberHasModRole)
                 {
-                    await SendToGeneralChannelAdminAsync("**MOD TEST**");
                     await CommandsListMods(countArgs, memberHasModRole);
                 }
                 else if (this.ReadChannelGeneralAll())
                 {
-                    await SendToGeneralChannelAllAsync("**ALL TEST**");
                     await CommandsListAll(countArgs, memberHasModRole);
                 }
             }
