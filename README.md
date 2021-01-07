@@ -1,8 +1,6 @@
 # Lilac_x3_Bot
 Bot für Lilac_x3 Discord Server
 
-## Aktuelle Version: Version 1.2
-
 ## Version 1.2
   ## Neu in dieser Version:
   - Neu: Tägliches Update der Datenbank.
