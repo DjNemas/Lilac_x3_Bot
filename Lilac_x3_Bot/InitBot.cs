@@ -27,6 +27,7 @@ namespace Lilac_x3_Bot
         private XDocument _configXML;
         public async Task MainAsync()
         {
+            Console.OutputEncoding = System.Text.Encoding.Unicode;
             // New Client
             // Load config.xml if doesn't exist create one. Both with exception handling.
             this._configXML = this.configClass.LoadConfigXML();

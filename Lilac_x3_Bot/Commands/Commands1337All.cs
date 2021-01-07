@@ -2,6 +2,7 @@
 using Lilac_x3_Bot.Database.Tables;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace Lilac_x3_Bot.Commands
 {
     public class Commands1337All : CommandHeader
     {
+        private const int NAME_LENGTH = 20;
+
         [Command("1337streak")]
         public async Task Feature1337StreakAsync()
         {
@@ -151,11 +154,9 @@ namespace Lilac_x3_Bot.Commands
                 List<string> sbList = new List<string>();
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("```");
-                sb.Append('-', 43).Append("Highscore List").Append('-', 42).AppendLine();
-                sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}\n",
-                     " ",
+                sb.Append('-', 31).Append("Highscore List").Append('-', 32).AppendLine();
+                sb.AppendFormat("|{0,4}|{1,14}|{2,22}|{3,11}|{4,10}|{5,10}\n",
                      "Rank",
-                     "Username",
                      "Counter Streak",
                      "Counter Longest Streak",
                      "Counter All",
@@ -170,10 +171,10 @@ namespace Lilac_x3_Bot.Commands
                 for (int i = 0; i < userCount; i++)
                 {
                     sb = new StringBuilder();
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}\n",
-                        "#",
+                    sb.AppendLine("User: " + users.ElementAt(i).username + "");
+
+                    sb.AppendFormat("|{0,4}|{1,14}|{2,22}|{3,11}|{4,10}|{5,10}\n",
                         i + 1,
-                        users.ElementAt(i).username,
                         users.ElementAt(i).counter_streak.ToString(),
                         users.ElementAt(i).counter_longest_streak.ToString(),
                         users.ElementAt(i).counter_all.ToString(),
@@ -205,7 +206,7 @@ namespace Lilac_x3_Bot.Commands
                 {
                     await SendTo1337ChannelAsync(item);
                 }
-                
+
                 ////  BACKUP
                 //if (streakQuery.Count() < 10)
                 //{
@@ -270,24 +271,20 @@ namespace Lilac_x3_Bot.Commands
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("```");
-            sb.Append('-', 22).Append("Highscore List Streak").Append('-', 22).AppendLine();
-            sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}\n",
-                 " ",
+            sb.Append('-', 11).Append("Highscore List Streak").Append('-', 11).AppendLine();
+            sb.AppendFormat("|{0,4}|{1,14}|{2,22}\n",
                  "Rank",
-                 "Username",
                  "Counter Streak",
                  "Counter Longest Streak"
                  );
-
 
             if (streakQuery.Count() < 10)
             {
                 for (int i = 0; i < streakQuery.Count(); i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}",
-                        "#",
+                    sb.AppendLine("User: " + users.ElementAt(i).username + "");
+                    sb.AppendFormat("|{0,4}|{1,14}|{2,22}",
                         i + 1,
-                        users.ElementAt(i).username,
                         users.ElementAt(i).counter_streak.ToString(),
                         users.ElementAt(i).counter_longest_streak.ToString()
                         );
@@ -298,10 +295,9 @@ namespace Lilac_x3_Bot.Commands
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}",
-                        "#",
+                    sb.AppendLine("User: " + users.ElementAt(i).username + "");
+                    sb.AppendFormat("|{0,4}|{1,14}|{2,22}",
                         i + 1,
-                        users.ElementAt(i).username,
                         users.ElementAt(i).counter_streak.ToString(),
                         users.ElementAt(i).counter_longest_streak.ToString()
                         );
@@ -344,11 +340,9 @@ namespace Lilac_x3_Bot.Commands
 
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("```");
-            sb.Append('-', 20).Append("Highscore List Counter").Append('-', 19).AppendLine();
-            sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,10}|{5,10}\n",
-                 " ",
+            sb.Append('-', 8).Append("Highscore List Counter").Append('-', 9).AppendLine();
+            sb.AppendFormat("|{0,4}|{1,11}|{2,10}|{3,10}\n",
                  "Rank",
-                 "Username",
                  "Counter All",
                  "Date Begin",
                  "Date Last");
@@ -358,10 +352,9 @@ namespace Lilac_x3_Bot.Commands
             {
                 for (int i = 0; i < streakQuery.Count(); i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,10}|{5,10}",
-                        "#",
+                    sb.AppendLine("User: " + users.ElementAt(i).username + "");
+                    sb.AppendFormat("|{0,4}|{1,11}|{2,10}|{3,10}",
                         i + 1,
-                        users.ElementAt(i).username,
                         users.ElementAt(i).counter_all.ToString(),
                         users.ElementAt(i).date_begin,
                         users.ElementAt(i).date_last
@@ -373,10 +366,9 @@ namespace Lilac_x3_Bot.Commands
             {
                 for (int i = 0; i < 10; i++)
                 {
-                    sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,11}|{4,10}|{5,10}",
-                        "#",
+                    sb.AppendLine("User: " + users.ElementAt(i).username + "");
+                    sb.AppendFormat("|{0,4}|{1,11}|{2,10}|{3,10}",
                         i + 1,
-                        users.ElementAt(i).username,
                         users.ElementAt(i).counter_all.ToString(),
                         users.ElementAt(i).date_begin,
                         users.ElementAt(i).date_last

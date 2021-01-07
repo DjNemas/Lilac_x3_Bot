@@ -201,7 +201,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
             {
                 while (true)
                 {
-                    
                     CommandHeader _c2 = new CommandHeader();
                     SocketTextChannel textChannel;
 
@@ -215,7 +214,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                         triggerZeit = new DateTime(aktuelleZeit.Year, aktuelleZeit.Month, aktuelleZeit.Day, 13, 38, 00, 000).AddDays(1);
                         iTriggerZeit = Convert.ToInt32(triggerZeit.Subtract(aktuelleZeit).TotalMilliseconds);
                     }
-                    // sleep until the respons time is 13:38 each day 
+                    // sleep until the respons time is 13:38 each day
                     Thread.Sleep(iTriggerZeit);
 
                     // If 1337ChannelID is set
