@@ -18,6 +18,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
         // Member
         private bool _devMode;
         private int counterUserPerDay = 0;
+        private static bool initPostDaylieStatsOnes = false;
         CommandHeader _c = new CommandHeader();
         DiscordSocketClient _client;
         CommandHandlingService _command;
@@ -34,6 +35,13 @@ namespace Lilac_x3_Bot.ExtraFeatures
             this._client = client;
             this._command = command;
             this._command.AddAbonents(Message1337);
+
+            if (!initPostDaylieStatsOnes)
+            {
+                this._client.GuildAvailable += PostDaylieStats;
+                t.CWLTextColor("PostDaylieStats Inizialisiert", ConsoleColor.Yellow);
+                initPostDaylieStatsOnes = true;
+            }
         }
 
         private async Task Message1337(SocketMessage rawMessage)
