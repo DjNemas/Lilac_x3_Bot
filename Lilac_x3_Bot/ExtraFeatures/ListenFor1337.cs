@@ -39,7 +39,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
             if (!initPostDaylieStatsOnes)
             {
                 this._client.GuildAvailable += PostDaylieStats;
-                t.CWLTextColor("PostDaylieStats Inizialisiert", ConsoleColor.Yellow);
                 initPostDaylieStatsOnes = true;
             }
         }
@@ -205,6 +204,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
 #pragma warning restore CS1998 // Bei der asynchronen Methode fehlen "await"-Operatoren. Die Methode wird synchron ausgeführt.
         {
 #pragma warning disable CS4014 // Da auf diesen Aufruf nicht gewartet wird, wird die Ausführung der aktuellen Methode vor Abschluss des Aufrufs fortgesetzt.
+            if (initPostDaylieStatsOnes) return;
             Task.Run(async () =>
             {
                 while (true)

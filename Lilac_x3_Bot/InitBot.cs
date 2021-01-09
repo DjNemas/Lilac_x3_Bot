@@ -1,7 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Lilac_x3_Bot.Commands;
 using Lilac_x3_Bot.ExtraFeatures;
 using Lilac_x3_Bot.Service;
 using Microsoft.Extensions.DependencyInjection;
