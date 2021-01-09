@@ -40,7 +40,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
             {
                 this._client.GuildAvailable += PostDaylieStats;
                 t.CWLTextColor(DateTime.Now.ToString() + " PostDaylieStats Inizialisiert", ConsoleColor.Yellow);
-                initPostDaylieStatsOnes = true;
             }
         }
 
@@ -210,6 +209,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 t.CWLTextColor(DateTime.Now.ToString() + " DEV: PostDaylieStats returned: ", ConsoleColor.Yellow);
                 return;
             }
+            initPostDaylieStatsOnes = true;
             Task.Run(async () =>
             {
                 while (true)
