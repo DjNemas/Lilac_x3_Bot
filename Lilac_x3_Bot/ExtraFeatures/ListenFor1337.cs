@@ -327,19 +327,18 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     counterUserPerDay = 0;
                     #endregion
 
-                    #region Set Counter to 0 for ever User that is on Day 2
+                    #region Set Counter to 0 for ever User that fail on this day
                     this.db = this.dbClass.connect();
                     TablesHeader dbTable = new TablesHeader(this.db);
 
                     var table1337 = dbTable.Table1337;
 
-                    var twoDaysBeforDateTime = DateTime.Today.AddDays(-2);
+                    var twoDaysBeforDateTime = DateTime.Today.AddDays(-1);
 
                     foreach (var item in table1337)
                     {
                         string[] lastDate = item.date_last.Split(".");
                         DateTime lastDateTime = new DateTime(Convert.ToInt32(lastDate[2]), Convert.ToInt32(lastDate[1]), Convert.ToInt32(lastDate[0]));
-                        DateTime.Today.AddDays(-2);
                         if (lastDateTime.Ticks <= twoDaysBeforDateTime.Ticks)
                         {
                             item.counter_streak = 0;
