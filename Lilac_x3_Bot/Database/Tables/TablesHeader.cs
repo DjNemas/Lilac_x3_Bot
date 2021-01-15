@@ -9,6 +9,7 @@ namespace Lilac_x3_Bot.Database.Tables
     public class TablesHeader : DataContext
     {
         public Table<Table1337> Table1337;
+        public Table<Table1337_2> Table1337_2;
         // add tables here!
         public TablesHeader(IDbConnection connection) : base(connection) { }
     }

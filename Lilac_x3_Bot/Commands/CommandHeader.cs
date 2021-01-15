@@ -385,7 +385,8 @@ namespace Lilac_x3_Bot.Commands
         public StringBuilder GeneralModCommandsList(StringBuilder str)
         {
             str.AppendLine("__Berechtigung: Moderatoren Rolle | Modul General__");
-            str.AppendLine("`" + this.Prefix + "showuser <userid>` Gibt alle 1337 Stats für den angegebenen User aus.");
+            str.AppendLine("`" + this.Prefix + "showusertoday <UserID>` Gibt alle 1337 Stats für den angegebenen User von Heute aus.");
+            str.AppendLine("`" + this.Prefix + "showuseryesterday <UserID>` Gibt alle 1337 Stats für den angegebenen User von Gestern aus.");
             str.AppendLine("`" + this.Prefix + "edituser <UserID> <Counter_Streak> <Counter_Highest_Streak> <CounterAll> <Last_Date>` Ermöglicht das Editieren der Stats vom angegebenen User.");
             return str;
         }
@@ -419,5 +420,7 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "1337highscore <Anzahl User (1-30)>` Zeigt die Anzahl User, geordnet nach aktuell höchster Streak und Namen, sowie allen restlichen Informationen, als Highscoreliste an.");
             return str;
         }
+
+
     }
 }

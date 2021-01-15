@@ -6,16 +6,24 @@ namespace Lilac_x3_Bot
 {
     public class Tools
     {
-        public void CWLTextColor(string text, ConsoleColor textColor)
+        private static string formatFullDate = "dd.MM.yyyy HH:mm:ss";
+        public void CWLTextColor(string text, ConsoleColor textColor, bool? isError = false)
         {
             Console.ForegroundColor = textColor;
-            Console.WriteLine(text);
+            if (isError == null)
+            {
+                Console.WriteLine(DateTime.Now.ToString(formatFullDate) + " [Debug] " + text);
+            }
+            else
+            {
+                Console.WriteLine(DateTime.Now.ToString(formatFullDate) + " [Error] " + text);
+            }
             Console.ForegroundColor = ConsoleColor.White;
         }
         public void CWLTextColor(Exception e, ConsoleColor textColor)
         {
             Console.ForegroundColor = textColor;
-            Console.WriteLine(e);
+            Console.WriteLine(DateTime.Now.ToString(formatFullDate) + " [Error] " + e);
             Console.ForegroundColor = ConsoleColor.White;
         }
 

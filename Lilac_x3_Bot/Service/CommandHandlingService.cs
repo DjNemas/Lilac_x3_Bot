@@ -204,13 +204,21 @@ namespace Lilac_x3_Bot.Service
             edituser.module = Module.General;
             commandsWithPrivilegs.Add(edituser);
 
-            // Add ShowUser Command
-            var showuser = new CommandsWithPrivilegs();
-            showuser.prefix = this._prefix + "showuser";
-            showuser.privileg = Privilegs.ModRole;
-            showuser.privilegName = "ModRole";
-            showuser.module = Module.General;
-            commandsWithPrivilegs.Add(showuser);
+            // Add ShowUserToday Command
+            var showusertoday = new CommandsWithPrivilegs();
+            showusertoday.prefix = this._prefix + "showusertoday";
+            showusertoday.privileg = Privilegs.ModRole;
+            showusertoday.privilegName = "ModRole";
+            showusertoday.module = Module.General;
+            commandsWithPrivilegs.Add(showusertoday);
+
+            // Add ShowUserYesterday Command
+            var showuseryesterday = new CommandsWithPrivilegs();
+            showuseryesterday.prefix = this._prefix + "showuseryesterday";
+            showuseryesterday.privileg = Privilegs.ModRole;
+            showuseryesterday.privilegName = "ModRole";
+            showuseryesterday.module = Module.General;
+            commandsWithPrivilegs.Add(showuseryesterday);
 
             // Add ModRoleID Command
             var setmodroleid = new CommandsWithPrivilegs();

@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.ExtraFeatures;
 using Lilac_x3_Bot.Service;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static Lilac_x3_Bot.LogBot;
 
 namespace Lilac_x3_Bot
 {
@@ -27,6 +29,13 @@ namespace Lilac_x3_Bot
         public async Task MainAsync()
         {
             Console.OutputEncoding = System.Text.Encoding.Unicode;
+
+            //Init for Log
+            LogInit();
+            // Init DB
+            DatabaseInit db = new DatabaseInit();
+            db.InitDB();
+            
             // New Client
             // Load config.xml if doesn't exist create one. Both with exception handling.
             this._configXML = this.configClass.LoadConfigXML();
@@ -86,11 +95,13 @@ namespace Lilac_x3_Bot
         private Task UserJoined(SocketGuildUser user)
         {
             t.CWLTextColor("User: " + user.Username + "Joined the Guild.", ConsoleColor.Yellow);
+            LogMain("User: " + user.Username + "Joined the Guild.", LogLevel.Log);
             Task.Run(async () =>
             {
                 await _client.DownloadUsersAsync(_client.Guilds);
             });           
             t.CWLTextColor("All Users downloaded", ConsoleColor.Yellow);
+            LogMain("All Users downloaded", LogLevel.Log);
             return Task.CompletedTask;
         }
 
@@ -98,13 +109,14 @@ namespace Lilac_x3_Bot
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
+            DiscordAPIConsoleLog(msg.ToString() + "\n");
             return Task.CompletedTask;
         }
 
         // If token is invalid in configXML close this programm
         private void CloseByInvalidToken()
         {
-            t.CWLTextColor("Der Token ist Invalid, bitte überprüfe den Token!", ConsoleColor.Red);
+            LogMain("Der Token ist Invalid, bitte überprüfe den Token!", LogLevel.Error);
             t.CWLTextColor("Das Programm wird in 5 sec geschlossen!", ConsoleColor.Yellow);
             for (int i = 5; i >= 0; i--)
             {
