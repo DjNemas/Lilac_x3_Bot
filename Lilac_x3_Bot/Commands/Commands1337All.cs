@@ -89,7 +89,7 @@ namespace Lilac_x3_Bot.Commands
 
             if (args == null)
             {
-                await SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt:\n>>> `" +
+                await SendTo1337ChannelAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt:\n>>> `" +
                     Prefix + "1337highscore <Anzahl User (1-30)>`");
                 return;
             }
@@ -103,7 +103,7 @@ namespace Lilac_x3_Bot.Commands
             }
             catch (Exception)
             {
-                await SendToGeneralChannelAdminAsync("<Anzahl User (1-30)> war keine Zahl!");
+                await SendTo1337ChannelAsync("<Anzahl User (1-30)> war keine Zahl!");
                 return;
             }
 
@@ -113,13 +113,13 @@ namespace Lilac_x3_Bot.Commands
             }
             if (userCount < 1)
             {
-                await SendToGeneralChannelAdminAsync(Context.User.Mention + "Was zum henker willst du mit weniger als 1 User sehen? o.O");
+                await SendTo1337ChannelAsync(Context.User.Mention + "Was zum henker willst du mit weniger als 1 User sehen? o.O");
                 return;
             }
 
             if (countArgs.Length > 1)
             {
-                await SendToGeneralChannelAdminAsync(Context.User.Mention + " Zu viele Agumente!");
+                await SendTo1337ChannelAsync(Context.User.Mention + " Zu viele Agumente!");
             }
             else
             {
@@ -206,44 +206,6 @@ namespace Lilac_x3_Bot.Commands
                 {
                     await SendTo1337ChannelAsync(item);
                 }
-
-                ////  BACKUP
-                //if (streakQuery.Count() < 10)
-                //{
-                //    for (int i = 0; i < streakQuery.Count(); i++)
-                //    {
-                //        sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}",
-                //            "#",
-                //            i + 1,
-                //            users.ElementAt(i).username,
-                //            users.ElementAt(i).counter_streak.ToString(),
-                //            users.ElementAt(i).counter_longest_streak.ToString(),
-                //            users.ElementAt(i).counter_all.ToString(),
-                //            users.ElementAt(i).date_begin,
-                //            users.ElementAt(i).date_last
-                //            );
-                //        sb.AppendLine();
-                //    }
-                //}
-                //else
-                //{
-                //    for (int i = 0; i < 10; i++)
-                //    {
-                //        sb.AppendFormat("{0,1}|{1,4}|{2,20}|{3,14}|{4,22}|{5,11}|{6,10}|{7,10}",
-                //            "#",
-                //            i + 1,
-                //            users.ElementAt(i).username,
-                //            users.ElementAt(i).counter_streak.ToString(),
-                //            users.ElementAt(i).counter_longest_streak.ToString(),
-                //            users.ElementAt(i).counter_all.ToString(),
-                //            users.ElementAt(i).date_begin,
-                //            users.ElementAt(i).date_last
-                //            );
-                //        sb.AppendLine();
-                //    }
-                //}
-
-
             }
         }
 
