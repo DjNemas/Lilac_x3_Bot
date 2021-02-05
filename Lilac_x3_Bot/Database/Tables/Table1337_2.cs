@@ -2,8 +2,8 @@
 
 namespace Lilac_x3_Bot.Database.Tables
 {
-    [Table(Name = "1337")]
-    public class Table1337 
+    [Table(Name = "1337_2")]
+    public class Table1337_2
     {
         // User ID
         [Column(Name = "userid", IsPrimaryKey = true)]

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using static Lilac_x3_Bot.LogBot;
 
 namespace Lilac_x3_Bot
 {
@@ -44,7 +45,7 @@ namespace Lilac_x3_Bot
             }
             else
             {
-                t.CWLTextColor("Config Ordner konnte nicht erstellt werden!", ConsoleColor.Red);
+                LogMain("Config Ordner konnte nicht erstellt werden!", LogLevel.Error);
             }
 
             try
@@ -70,14 +71,15 @@ namespace Lilac_x3_Bot
                                                      )
                                                 );
                 config.Save(this._configPath);
-                Console.WriteLine("config.xml war nicht vorhanden und wurde erstellt.");
-                this.t.CWLTextColor("Bitte die config.xml anpassen!", ConsoleColor.Yellow);
+                t.CWLTextColor("config.xml war nicht vorhanden und wurde erstellt.", ConsoleColor.Yellow);
+                LogMain("config.xml war nicht vorhanden und wurde erstellt.", LogLevel.Dev);
+                LogMain("Bitte die config.xml anpassen!", LogLevel.Error);
                 return true;
             }
             catch (Exception e)
             {
-                this.t.CWLTextColor("config.xml konnte nicht erstellt werden.\nMore Details:", ConsoleColor.Red);
-                Console.WriteLine(e);
+                t.CWLTextColor("config.xml konnte nicht erstellt werden.\nMore Details: " + e, ConsoleColor.Red, true);
+                LogMain("config.xml konnte nicht erstellt werden.\nMore Details: " + e, LogLevel.Error);
                 return false;
             }
         }
@@ -97,7 +99,7 @@ namespace Lilac_x3_Bot
             }
             catch (Exception)
             {
-                this.t.CWLTextColor("Can't get Token from config.xml", ConsoleColor.Red);
+                LogMain("Can't get Token from config.xml", LogLevel.Error);
                 return null;
             }
         }
@@ -142,7 +144,7 @@ namespace Lilac_x3_Bot
                 else
                 {
                     InitBot init = new InitBot();
-                    if (init._devMode) t.CWLTextColor($"{feature} {element} ID nicht vorhanden", ConsoleColor.Yellow);
+                    if (init._devMode) LogMain($"{feature} {element} ID nicht vorhanden", LogLevel.Warning);
                 }
             }
             return channelID;

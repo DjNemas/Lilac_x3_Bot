@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Lilac_x3_Bot.LogBot;
 
 namespace Lilac_x3_Bot.Commands
 {
@@ -126,7 +127,7 @@ namespace Lilac_x3_Bot.Commands
                         "Counter Longest Streak: `" + countArgs[2] + "`\n" +
                         "Counter Alltime: `" + countArgs[3] + "`\n" +
                         "Date Last: `" + countArgs[4] + "`");
-                    t.CWLTextColor("User: " + Context.Guild.GetUser(Convert.ToUInt64(countArgs[0])).Username + " wurde von " + Context.User.Username + " mit der ID " + Context.User.Id + " editiert.", ConsoleColor.Yellow);
+                    LogMain("User: " + Context.Guild.GetUser(Convert.ToUInt64(countArgs[0])).Username + " wurde von " + Context.User.Username + " mit der ID " + Context.User.Id + " editiert.", LogLevel.Warning);
                 }
                 else
                 {
@@ -135,8 +136,19 @@ namespace Lilac_x3_Bot.Commands
             }
         }
 
-        [Command("showuser")]
-        public async Task ShowUserAsync([Remainder] string args = null)
+        [Command("showusertoday")]
+        public async Task ShowUserTodayAsync([Remainder] string args = null)
+        {
+            await ShowUser(args, ShowUserEnum.Today);
+        }
+
+        [Command("showuseryesterday")]
+        public async Task ShowUserYesterdayAsync([Remainder] string args = null)
+        {
+            await ShowUser(args, ShowUserEnum.Yesterday);
+        }
+
+        private async Task ShowUser(string args, ShowUserEnum su)
         {
             if (!ReadChannelGeneralAdmin()) return;
 
@@ -148,8 +160,16 @@ namespace Lilac_x3_Bot.Commands
 
             if (args == null)
             {
-                await SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt:\n>>> `" +
-                    Prefix + "showuser <UserID>`");
+                if (su == ShowUserEnum.Today)
+                {
+                    await SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt:\n>>> `" +
+                    Prefix + "showusertoday <UserID>`");
+                }
+                else if(su == ShowUserEnum.Yesterday)
+                {
+                    await SendToGeneralChannelAdminAsync(Context.User.Mention + " Du hast zu wenige Argumente angegeben. Bitte nutze den Befehl wie folgt:\n>>> `" +
+                    Prefix + "showuseryesterday <UserID>`");
+                }
                 return;
             }
             args = args.ToLower();
@@ -175,8 +195,9 @@ namespace Lilac_x3_Bot.Commands
                     var db = new DatabaseInit().connect();
                     TablesHeader dbTable = new TablesHeader(db);
 
-                    var table1337 = dbTable.Table1337;
-                    Table1337 updateUser;
+                    Table1337 updateUserToday = new Table1337();
+                    Table1337_2 updateUserYesterday = new Table1337_2();
+
                     try
                     {
                         // Check if UserID is number
@@ -191,30 +212,54 @@ namespace Lilac_x3_Bot.Commands
                             return;
                         }
                         // Get User from Database
-                        updateUser = dbTable.Table1337.Single((item) => item.userid == userID);
+                        if (su == ShowUserEnum.Today)
+                        {
+                            updateUserToday = dbTable.Table1337.Single((item) => item.userid == userID);
+                        }
+                        else if (su == ShowUserEnum.Yesterday)
+                        {
+                            updateUserYesterday = dbTable.Table1337_2.Single((item) => item.userid == userID);
+                        }
                     }
                     catch (Exception)
                     {
                         await SendToGeneralChannelAdminAsync("Es wurde kein User mit der ID: " + countArgs[0] + " gefunden");
                         return;
                     }
-
-                    await SendToGeneralChannelAdminAsync("User Informationen\n" +
-                        ">>> Name: `" + updateUser.username + "`\n" +
-                        "ID: `" + updateUser.userid.ToString() + "`\n" +
-                        "Counter Streak: `" + updateUser.counter_streak + "`\n" +
-                        "Counter Longest Streak: `" + updateUser.counter_longest_streak + "`\n" +
-                        "Counter All: `" + updateUser.counter_all + "`\n" +
-                        "Date Begin: `" + updateUser.date_begin + "`\n" +
-                        "Date Last: `" + updateUser.date_last + "`");
+                    if (su == ShowUserEnum.Today)
+                    {
+                        await SendToGeneralChannelAdminAsync("User Informationen\n" +
+                        ">>> Name: `" + updateUserToday.username + "`\n" +
+                        "ID: `" + updateUserToday.userid.ToString() + "`\n" +
+                        "Counter Streak: `" + updateUserToday.counter_streak + "`\n" +
+                        "Counter Longest Streak: `" + updateUserToday.counter_longest_streak + "`\n" +
+                        "Counter All: `" + updateUserToday.counter_all + "`\n" +
+                        "Date Begin: `" + updateUserToday.date_begin + "`\n" +
+                        "Date Last: `" + updateUserToday.date_last + "`");
+                    }
+                    else if (su == ShowUserEnum.Yesterday)
+                    {
+                        await SendToGeneralChannelAdminAsync("User Informationen\n" +
+                        ">>> Name: `" + updateUserYesterday.username + "`\n" +
+                        "ID: `" + updateUserYesterday.userid.ToString() + "`\n" +
+                        "Counter Streak: `" + updateUserYesterday.counter_streak + "`\n" +
+                        "Counter Longest Streak: `" + updateUserYesterday.counter_longest_streak + "`\n" +
+                        "Counter All: `" + updateUserYesterday.counter_all + "`\n" +
+                        "Date Begin: `" + updateUserYesterday.date_begin + "`\n" +
+                        "Date Last: `" + updateUserYesterday.date_last + "`");
+                    }
+                    
                 }
                 else
                 {
                     await SendToGeneralChannelAdminAsync("Du hast keine Berechtigung. Du musst im besitz der `" + Context.Guild.GetRole(ModRoleID).Name + "` Rolle sein.");
                 }
-
             }
         }
-
+        private enum ShowUserEnum
+        {
+            Today,
+            Yesterday
+        }
     }
 }
