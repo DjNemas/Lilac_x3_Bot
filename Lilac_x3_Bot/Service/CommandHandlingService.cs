@@ -196,6 +196,22 @@ namespace Lilac_x3_Bot.Service
             version.module = Module.General;
             commandsWithPrivilegs.Add(version);
 
+            // Add Rollback Command
+            var rollback = new CommandsWithPrivilegs();
+            rollback.prefix = this._prefix + "rollback";
+            rollback.privileg = Privilegs.ModRole;
+            rollback.privilegName = "ModRole";
+            rollback.module = Module.General;
+            commandsWithPrivilegs.Add(rollback);
+
+            // Add CountUser Command
+            var countuser = new CommandsWithPrivilegs();
+            countuser.prefix = this._prefix + "countuser";
+            countuser.privileg = Privilegs.ModRole;
+            countuser.privilegName = "ModRole";
+            countuser.module = Module.General;
+            commandsWithPrivilegs.Add(countuser);
+
             // Add EditUser Command
             var edituser = new CommandsWithPrivilegs();
             edituser.prefix = this._prefix + "edituser";
