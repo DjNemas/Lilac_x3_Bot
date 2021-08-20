@@ -1,6 +1,12 @@
 # Lilac_x3_Bot
 Bot für Lilac_x3 Discord Server
 
+## Version 1.3
+  ## Neu in dieser Version:
+  - Neu: Mods können nun mit !rollback ein Rollback der Datenbank vom Datum tt.mm.jjjj aufspielen.
+  - Neu: Mods können nun mit !countuser @user einfacher einen User nach editieren.
+  - Updated: Alle Nuget APIs auf die neuste Version geupdatet.
+
 ## Version 1.2
   ## Neu in dieser Version:
   - Neu: Tägliches Update der Datenbank.
