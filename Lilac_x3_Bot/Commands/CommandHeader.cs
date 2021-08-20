@@ -388,6 +388,8 @@ namespace Lilac_x3_Bot.Commands
             str.AppendLine("`" + this.Prefix + "showusertoday <UserID>` Gibt alle 1337 Stats für den angegebenen User von Heute aus.");
             str.AppendLine("`" + this.Prefix + "showuseryesterday <UserID>` Gibt alle 1337 Stats für den angegebenen User von Gestern aus.");
             str.AppendLine("`" + this.Prefix + "edituser <UserID> <Counter_Streak> <Counter_Highest_Streak> <CounterAll> <Last_Date>` Ermöglicht das Editieren der Stats vom angegebenen User.");
+            str.AppendLine("`" + this.Prefix + "rollback <DD> <MM> <YYYY>` Spielt ein Backup vom Tag DD MM YYYY auf.");
+            str.AppendLine("`" + this.Prefix + "countuser <@User>` Zählt den User auch außerhalb der Event Zeit.");
             return str;
         }
 

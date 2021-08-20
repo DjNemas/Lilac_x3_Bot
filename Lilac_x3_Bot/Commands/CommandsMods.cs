@@ -6,7 +6,10 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using static Lilac_x3_Bot.LogBot;
+using Discord.WebSocket;
+using System.Data.SQLite;
 
 namespace Lilac_x3_Bot.Commands
 {
@@ -146,6 +149,156 @@ namespace Lilac_x3_Bot.Commands
         public async Task ShowUserYesterdayAsync([Remainder] string args = null)
         {
             await ShowUser(args, ShowUserEnum.Yesterday);
+        }
+
+        [Command("rollback")]
+        public async Task Rollback()
+        {
+            if (!ReadChannelGeneralAdmin()) return;
+
+            if (ModRoleID == 0)
+            {
+                await SendToGeneralChannelAdminAsync("Die Mod rolle wurde noch nicht gesetzt, bitte dem SeverAdministrator bescheid geben!");
+                return;
+            }
+
+            await SendToGeneralChannelAdminAsync("Bitte nutze den Command wie folgt: `" + Prefix + "rollback <DD> <MM> <YYYY>`"); ;
+        }
+
+        [Command("rollback")]
+        public async Task Rollback(string day, string month, string year)
+        {
+            if (!ReadChannelGeneralAdmin()) return;
+
+            if (ModRoleID == 0)
+            {
+                await SendToGeneralChannelAdminAsync("Die Mod rolle wurde noch nicht gesetzt, bitte dem SeverAdministrator bescheid geben!");
+                return;
+            }
+            Console.WriteLine(day);
+            if (day.Length != 2)
+            {
+                await SendToGeneralChannelAdminAsync("Bitte Tag im Format DD (2 Zahlen) angeben.");
+                return;
+            }
+            if (month.Length != 2)
+            {
+                await SendToGeneralChannelAdminAsync("Bitte Tag im Format MM (2 Zahlen) angeben.");
+                return;
+            }
+            if (year.Length != 4)
+            {
+                await SendToGeneralChannelAdminAsync("Bitte Tag im Format YYYY (4 Zahlen) angeben.");
+                return;
+            }
+
+            string backupFolder = "./backup/db/";
+            string[] file = Directory.GetFiles(backupFolder, $"{day}-{month}-{year}*");
+            if (file.Count() == 0)
+            {
+                await SendToGeneralChannelAdminAsync("Backup nicht gefunden.");
+                return;
+            }
+            else if (file.Count() == 1)
+            {
+                File.Delete("./database.db");
+                File.Copy(file[0], "./database.db");
+                await SendToGeneralChannelAdminAsync("Backup aufgespielt.");
+            }
+        }
+
+        [Command("countuser")]
+        public async Task countuser(SocketGuildUser user)
+        {
+            if (!ReadChannelGeneralAdmin()) return;
+
+            if (ModRoleID == 0)
+            {
+                await SendToGeneralChannelAdminAsync("Die Mod rolle wurde noch nicht gesetzt, bitte dem SeverAdministrator bescheid geben!");
+                return;
+            }
+
+            string formatDate = "dd.MM.yyyy";
+            SQLiteConnection db = this.dbClass.connect();
+            TablesHeader dbTable = new TablesHeader(db);
+
+            // select the curent users userid from database
+            var table1337 = dbTable.Table1337;
+            var userID = from table in table1337
+                         where table.userid == user.Id
+                         select table.userid;
+
+            if (userID.Count() == 0)
+            {
+                // Add new User to Database if not exist
+                Table1337 addNewUser = new Table1337()
+                {
+                    userid = user.Id,
+                    username = user.Username,
+                    counter_all = 1,
+                    counter_streak = 1,
+                    counter_longest_streak = 1,
+                    date_begin = DateTime.Today.ToString(formatDate),
+                    date_last = DateTime.Today.ToString(formatDate)
+                };
+
+                dbTable.Table1337.InsertOnSubmit(addNewUser);
+                dbTable.SubmitChanges();
+
+                await SendToGeneralChannelAdminAsync(user.Username + " gezählt und neu in der Datenbank angelegt.");
+            }
+            else
+            {
+                
+
+                var userID2 = from table in table1337
+                              where table.userid == user.Id
+                              select table;
+
+                // temp variable for changes
+                uint counter_allQ = 0;
+                uint counter_streakQ = 0;
+                uint counter_logest_streakQ = 0;
+                string date_lastQ = " ";
+
+                // get current data from user
+                foreach (var item in userID2)
+                {
+                    counter_allQ = item.counter_all;
+                    counter_streakQ = item.counter_streak + 1;
+                    counter_logest_streakQ = item.counter_longest_streak;
+                    date_lastQ = item.date_last;
+                }
+
+                // update counter longest streak if user got higher streak
+                if (counter_streakQ > counter_logest_streakQ)
+                {
+                    counter_logest_streakQ = counter_streakQ;
+                }
+
+                // get the user which should be updated by id
+                var updateTable = dbTable.Table1337.Single((item) => item.userid == user.Id);
+
+                // update values for user
+                updateTable.username = user.Username;
+                updateTable.counter_all = counter_allQ + 1;
+                if (date_lastQ != DateTime.Today.AddDays(-1).ToString(formatDate))
+                {
+                    updateTable.counter_streak = 1;
+                }
+                else
+                {
+                    updateTable.counter_streak = counter_streakQ;
+                }
+                // Muss noch angepasst werden | An Tag anpassen
+                updateTable.counter_longest_streak = counter_logest_streakQ;
+                updateTable.date_last = DateTime.Today.ToString(formatDate);
+
+                // send data to database when SubmitChanges() is called.
+                dbTable.SubmitChanges();
+                await SendToGeneralChannelAdminAsync(user.Username + " gezählt.");
+            }
+            db.Close();
         }
 
         private async Task ShowUser(string args, ShowUserEnum su)
