@@ -172,8 +172,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
             // check if message has 1337 or @1337 ones!
             if (counter1337 == 1 && counterM1337 != 1 || counter1337 != 1 && counterM1337 == 1)
             {
-                //Check if it is the right time! 133700 - 133759 otherwise break
-                if (!(133700 <= timeNowAsInt && 133759 > timeNowAsInt))
+                //Check if it is the right time! 133700 - 133800 otherwise break
+                if (!(133700 <= timeNowAsInt && 133800 >= timeNowAsInt))
                 {
                     if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
                         " Nicht in der richtigen Zeit!", context);
