@@ -58,7 +58,7 @@ namespace Lilac_x3_Bot.Commands
         }
 
         // For Listen on General Commands "All"
-            public bool ReadChannelGeneralAll()
+        public bool ReadChannelGeneralAll()
         {
             if (GenerelReadFromChannelAllID == Context.Channel.Id || GenerelReadFromChannelAllID == 0)
             {

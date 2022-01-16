@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Linq;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
         Tools t = new Tools();
         private static string formatDate = "dd.MM.yyyy";
         private static string formatTime = "HH:mm:ss";
-        private static string formatFullDate = "dd.MM.yyyy HH:mm:ss";
+        //private static string formatFullDate = "dd.MM.yyyy HH:mm:ss";
 
         public ListenFor1337(DiscordSocketClient client, CommandHandlingService command, bool devMode)
         {
@@ -44,7 +45,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 this._client.GuildAvailable += PostDaylieStats;
                 CopyTableEveryDay();
                 LogMain("PostDaylieStats Inizialisiert", LogLevel.Debug);
-                
             }
         }
 
