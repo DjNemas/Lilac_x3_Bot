@@ -31,7 +31,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
         Tools t = new Tools();
         private static string formatDate = "dd.MM.yyyy";
         private static string formatTime = "HH:mm:ss";
-        private static string formatFullDate = "dd.MM.yyyy HH:mm:ss";
+        //private static string formatFullDate = "dd.MM.yyyy HH:mm:ss";
 
         public ListenFor1337(DiscordSocketClient client, CommandHandlingService command, bool devMode)
         {
@@ -43,37 +43,9 @@ namespace Lilac_x3_Bot.ExtraFeatures
             if (!initPostDaylieStatsOnes)
             {
                 this._client.GuildAvailable += PostDaylieStats;
-                this._client.GuildAvailable += Jubilaeum;
                 CopyTableEveryDay();
                 LogMain("PostDaylieStats Inizialisiert", LogLevel.Debug);
             }
-        }
-
-        private async Task Jubilaeum(SocketGuild guild)
-        {
-            string checkFile = "./jubilaeumfinished.txt";
-            if (!File.Exists(checkFile))
-                File.WriteAllText(checkFile, "0");
-            if (!(File.ReadAllLines(checkFile)[0] == "0"))
-                return;
-            _ = Task.Run(async () =>
-            {
-                DateTime aktuelleZeit = DateTime.Now;
-                DateTime triggerZeit = new DateTime(2021, 12, 18, 13, 35, 0);
-                while (triggerZeit.CompareTo(aktuelleZeit) > 0)
-                {
-                    Thread.Sleep(1000);
-                    aktuelleZeit = DateTime.Now;
-                }
-                SocketTextChannel textChannel = (SocketTextChannel)_client.GetChannel(CommandHeader.Feature1337WriteIntoChannelID);
-                await textChannel.SendMessageAsync("Hallo Leute <a:lilacxHappyGIF:708754770008997968> <:AsaliaHerz:583022834314510357>\n" +
-                    "Heute ist das 1 Jährige Jubiläum von diesem Bot! <a:lilacxDrunkGif:774621678893400094>\n" +
-                    "Trotz einigen Schwierigkeiten und nach zahlreichen fixes danke ich euch vielmals dass Ihr mein Bot bis heute aktiv Nuzt!! <a:lilacxLoveGIF:708464221037527110>\n" +
-                    "Ich wünsche euch weiterhin viel Spaß und versäumt 1337 nicht. <:lilacxFlirty:857653988807802960>\n\n" +
-                    "Euer Dev Nemas");
-                File.WriteAllText(checkFile, "1");
-                return Task.CompletedTask;
-            });
         }
 
         private void CopyTableEveryDay()
