@@ -128,6 +128,21 @@ namespace Lilac_x3_Bot
             this._configXML.Save(this._configPath);
         }
 
+        public char GetPrefix()
+        {
+            char prefix = ' ';
+
+            this._configXML = LoadConfigXML();
+            var prefixQuery = from pre in this._configXML.Descendants("General")
+                              select pre;
+
+            foreach (var item in prefixQuery)
+            {
+                prefix = item.Element("Prefix").Value[0];
+            }
+            return prefix;
+        }
+
         public ulong GetChannelUID(string feature, string element)
         {
             this._configXML = LoadConfigXML();

@@ -2,6 +2,7 @@
 using Discord.Commands;
 using Discord.WebSocket;
 using Lilac_x3_Bot.Commands;
+using Lilac_x3_Bot.Commands.Functions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,46 +18,27 @@ namespace Lilac_x3_Bot.Service
         private readonly CommandService _commands;
         private IServiceProvider _service;
         private List<CommandsWithPrivilegs> _commandsWithPrivilegs;
-        private CommandHeader _header;
         private bool _devMode;
         private char _prefix = ' ';
 
         public CommandHandlingService()
         {
             ConfigXML configXML = new ConfigXML();
-            var config = configXML.LoadConfigXML();
-            var prefixQuery = from pre in config.Descendants("General")
-                              select pre;
-
-            foreach (var item in prefixQuery)
-            {
-                this._prefix = item.Element("Prefix").Value[0];
-            }
+            this._prefix = configXML.GetPrefix();
         }
 
-        public CommandHandlingService(DiscordSocketClient client, CommandService commands, XDocument configXML, bool devMode)
+        public CommandHandlingService(DiscordSocketClient client, CommandService commands, bool devMode)
         {
             this._client = client;
             this._commands = commands;
             this._devMode = devMode;
 
-            var prefixQuery = from pre in configXML.Descendants("General")
-                            select pre;
+            ConfigXML configXML = new ConfigXML();
+            this._prefix = configXML.GetPrefix();
 
-            foreach (var item in prefixQuery)
-            {
-                this._prefix = item.Element("Prefix").Value[0];
-            }
-
-            this._header = new CommandHeader();
             this._commandsWithPrivilegs = CompleteCommandListWithPropertys();
 
             this._client.MessageReceived += MessageReceived;
-        }
-
-        public char GetPrefix()
-        {
-            return this._prefix;
         }
 
         public async Task InitializeAsync(IServiceProvider service)
@@ -66,7 +48,7 @@ namespace Lilac_x3_Bot.Service
             // Add additional initialization code here...
         }
 
-        private async Task MessageReceived(SocketMessage rawMessage)
+        public async Task MessageReceived(SocketMessage rawMessage)
         {
             // Ignore system messages and messages from bots
             if (!(rawMessage is SocketUserMessage message)) return;
@@ -91,6 +73,13 @@ namespace Lilac_x3_Bot.Service
                     currentCommand.module = _commandsWithPrivilegs[i].module;
                 }
             }
+            await ContextResultHandler(result, currentCommand, context, splitedMsg);
+        }
+
+        public async Task ContextResultHandler(IResult result, CommandsWithPrivilegs currentCommand, SocketCommandContext context, string[] splitedMsg)
+        {
+
+            CommandsHeader comHeader = new CommandsHeader(context.Client, new ContextInfo(context.Guild.Id, context.Channel.Id, context.User.Id));
 
             if (result.Error.HasValue && currentCommand.prefix == splitedMsg[0] && result.Error == CommandError.UnmetPrecondition)
             {
@@ -98,44 +87,149 @@ namespace Lilac_x3_Bot.Service
                 {
                     if (currentCommand.privileg == Privilegs.All)
                     {
-                        bool check = _header.ReadChannelGeneralAll(context);
+                        bool check = comHeader.ReadChannelGeneralAll();
                         if (!check) return;
 
-                        await this._header.SendToGeneralChannelAllAsync(
+                        await comHeader.SendToGeneralChannelAllAsync(
                         "Du hast nicht die Berechtigung `" + currentCommand.prefix +
-                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
-                        , context);
+                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte.");
 
                     }
                     if (currentCommand.privileg == Privilegs.ServerAdministrator || currentCommand.privileg == Privilegs.ModRole)
                     {
-                        bool check = _header.ReadChannelGeneralAdmin(context);
+                        bool check = comHeader.ReadChannelGeneralAdmin();
                         if (!check) return;
 
-                        await this._header.SendToGeneralChannelAdminAsync(
+                        await comHeader.SendToGeneralChannelAdminAsync(
                         "Du hast nicht die Berechtigung `" + currentCommand.prefix +
-                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
-                        , context);
+                        "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte.");
                     }
                 }
                 else if (currentCommand.module == Module.Feature1337)
                 {
-                    bool check = _header.ReadChannel1337(context);
+                    bool check = comHeader.ReadChannel1337();
                     if (!check) return;
 
-                    await this._header.SendTo1337ChannelAsync(
+                    await comHeader.SendTo1337ChannelAsync(
                     "Du hast nicht die Berechtigung `" + currentCommand.prefix +
-                    "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte."
-                    , context);
+                    "` zu nutzen, du brauchst mindestens `" + currentCommand.privilegName + "` Rechte.");
                 }
             }
             else if (result.Error.HasValue && result.Error.Value == CommandError.UnknownCommand)
             {
-                await this._header.SendToGeneralChannelAllAsync("Solch ein Command kenne ich nicht. :sob:", context);
+                bool check = false;
+                if (comHeader.ReadChannelGeneralAll() ||
+                    comHeader.ReadChannelGeneralAdmin() ||
+                    comHeader.ReadChannel1337())
+                    check = true;
+
+                if (!check) return;
+
+                // Check user has mod role
+                var userRoles = context.User as SocketGuildUser;
+                bool userHasModRole = false;
+                Console.WriteLine(CommandsHeader.ModRoleID); // Checken
+                foreach (var item in userRoles.Roles)
+                {
+                    if (item.Id == CommandsHeader.ModRoleID)
+                        userHasModRole = true;
+                }
+
+                // if not admin channel and user has mod role
+                if (context.Channel.Id == CommandsHeader.GenerelReadFromChannelAdminID &&
+                    !(userHasModRole || userRoles.GuildPermissions.Administrator))
+                    return;
+                await context.Channel.SendMessageAsync("Solch ein Command kenne ich nicht. :sob:");
+            }
+            else if (result.Error.HasValue && result.Error.Value == CommandError.ObjectNotFound)
+            {
+                if (currentCommand.module == Module.General)
+                {
+                    if (currentCommand.privileg == Privilegs.All)
+                    {
+                        bool check = false;
+                        if (comHeader.ReadChannelGeneralAll() ||
+                            comHeader.ReadChannelGeneralAdmin() ||
+                            comHeader.ReadChannel1337())
+                            check = true;
+                        if (!check) return;
+
+                        await context.Channel.SendMessageAsync("Falsches Objekt übergeben. Bitte überprüfe deine Argumente noch einmal.\n`Result: " + result.ToString() + "`");
+
+                    }
+                    if (currentCommand.privileg == Privilegs.ServerAdministrator || currentCommand.privileg == Privilegs.ModRole)
+                    {
+                        bool check = comHeader.ReadChannelGeneralAdmin();
+                        if (!check) return;
+
+                        await context.Channel.SendMessageAsync("Falsches Objekt übergeben. Bitte überprüfe deine Argumente noch einmal.\n`Result: " + result.ToString() + "`");
+                    }
+                }
+                else if (currentCommand.module == Module.Feature1337)
+                {
+                    bool check = comHeader.ReadChannel1337();
+                    if (!check) return;
+
+                    await context.Channel.SendMessageAsync("Falsches Objekt übergeben. Bitte überprüfe deine Argumente noch einmal.\n`Result: " + result.ToString() + "`");
+                }
+            }
+            else if (result.Error.HasValue && result.Error.Value == CommandError.BadArgCount)
+            {
+                if (currentCommand.module == Module.General)
+                {
+                    if (currentCommand.privileg == Privilegs.All)
+                    {
+                        bool check = false;
+                        if (comHeader.ReadChannelGeneralAll() ||
+                            comHeader.ReadChannelGeneralAdmin() ||
+                            comHeader.ReadChannel1337())
+                            check = true;
+                        if (!check) return;
+
+                        await context.Channel.SendMessageAsync("Zu viele oder zu wenige Argumente angegeben.\n`Result: " + result.ToString() + "`");
+
+                    }
+                    if (currentCommand.privileg == Privilegs.ServerAdministrator || currentCommand.privileg == Privilegs.ModRole)
+                    {
+                        bool check = comHeader.ReadChannelGeneralAdmin();
+                        if (!check) return;
+
+                        await context.Channel.SendMessageAsync("Zu viele oder zu wenige Argumente angegeben.\n`Result: " + result.ToString() + "`");
+                    }
+                }
+                else if (currentCommand.module == Module.Feature1337)
+                {
+                    bool check = comHeader.ReadChannel1337();
+                    if (!check) return;
+
+                    await context.Channel.SendMessageAsync("Zu viele oder zu wenige Argumente angegeben.\n`Result: " + result.ToString() + "`");
+                }
             }
             else if (result.Error.HasValue)
             {
-                await this._header.SendToGeneralChannelAllAsync("Every Exeption that is not Handled by Bot Developer: `" + result.ToString() + "`\n**Pls contact the Developer!**", context);
+                bool check = false;
+                if (comHeader.ReadChannelGeneralAll() ||
+                    comHeader.ReadChannelGeneralAdmin() ||
+                    comHeader.ReadChannel1337())
+                    check = true;
+
+                if (!check) return;
+
+                // Check user has mod role
+                var userRoles = context.User as SocketGuildUser;
+                bool userHasModRole = false;
+                foreach (var item in userRoles.Roles)
+                {
+                    if (item.Id == CommandsHeader.ModRoleID)
+                        userHasModRole = true;
+                }
+
+                // if not admin channel and user has mod role
+                if (context.Channel.Id == CommandsHeader.GenerelReadFromChannelAdminID &&
+                    !(userHasModRole || userRoles.GuildPermissions.Administrator))
+                    return;
+
+                await context.Channel.SendMessageAsync("Every Exeption that is not Handled by Bot Developer: `" + result.ToString() + "`\n**Pls contact the Developer!**");
             }
         }
 

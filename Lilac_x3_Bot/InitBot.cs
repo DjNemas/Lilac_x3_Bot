@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.ExtraFeatures;
@@ -17,11 +18,13 @@ namespace Lilac_x3_Bot
     {
         // DevMode Member
         public bool _devMode = false;
-        private string _version = "Version 1.3";
+        public static readonly string _version = "Version 1.3";
         //Member
         private DiscordSocketClient _client;
         private CommandService _commands;
-        CommandHandlingService _cmdHandService;
+        private CommandHandlingService _cmdHandService;
+        private InteractionService _interactionService;
+        private InteractionServiceHandler _interactionServiceHandler;
         private IServiceProvider _services;
         private Tools t = new Tools();
         private ConfigXML configClass = new ConfigXML();
@@ -56,7 +59,15 @@ namespace Lilac_x3_Bot
             });
 
             // New CommandHandlingService
-            this._cmdHandService = new CommandHandlingService(this._client, this._commands, this._configXML, this._devMode);
+            this._cmdHandService = new CommandHandlingService(this._client, this._commands, this._devMode);
+
+            this._interactionService = new InteractionService(this._client, new InteractionServiceConfig
+            {
+                // Config Here if needed
+                LogLevel = LogSeverity.Info
+            });
+
+            this._interactionServiceHandler = new InteractionServiceHandler(this._interactionService, this._client);
 
             // Add Own Features
             ListenFor1337 _listenFor1337 = new ListenFor1337(_client, _cmdHandService, _devMode);
@@ -66,15 +77,18 @@ namespace Lilac_x3_Bot
                 .AddSingleton(this._client)
                 .AddSingleton(this._commands)
                 .AddSingleton(this._cmdHandService)
+                .AddSingleton(this._interactionServiceHandler)
                 // Add More Services below if needed
                 .AddSingleton(_listenFor1337)
                 .BuildServiceProvider();
 
             // Init CommandHandlingService
             await _cmdHandService.InitializeAsync(_services);
+            await _interactionServiceHandler.InitializeAsync(_services);
 
             this._client.Log += Log;
             this._client.UserJoined += UserJoined;
+            this._client.Connected += ClientConnected;
             
 
             if (this._configXML != null)
@@ -89,6 +103,21 @@ namespace Lilac_x3_Bot
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
+        }
+
+        private async Task ClientConnected()
+        {
+            foreach (var guild in _client.Guilds)
+            {
+                var list = this._interactionService.RestClient.GetGlobalApplicationCommands().Result;
+                Console.WriteLine("Global Commands Count: " + list.Count);
+                if (list.Count > 0)
+                {
+                    this._interactionService.RestClient.DeleteAllGlobalCommandsAsync().Wait();
+                }
+                await this._interactionServiceHandler.RegisterSlashCommandsGuild(guild.Id);
+                Console.WriteLine("Slash Command for Guild " + guild.Name + " Registered.");
+            }
         }
 
         // Fire if new user connect and download all member again
@@ -131,11 +160,6 @@ namespace Lilac_x3_Bot
                 Thread.Sleep(1000);
             }
             System.Environment.Exit(1);
-        }
-
-        public string GetVersion()
-        {
-            return this._version;
         }
     }
 }

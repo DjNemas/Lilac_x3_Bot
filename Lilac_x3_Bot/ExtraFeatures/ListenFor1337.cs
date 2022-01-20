@@ -1,15 +1,12 @@
 ﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Lilac_x3_Bot.Commands;
+using Lilac_x3_Bot.Commands.Functions;
 using Lilac_x3_Bot.Database;
 using Lilac_x3_Bot.Database.Tables;
 using Lilac_x3_Bot.Service;
 using System;
-using System.Collections.Generic;
-using System.Data.Linq;
 using System.Data.SQLite;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +20,6 @@ namespace Lilac_x3_Bot.ExtraFeatures
         private bool _devMode;
         private int counterUserPerDay = 0;
         private static bool initPostDaylieStatsOnes = false;
-        CommandHeader _c = new CommandHeader();
         DiscordSocketClient _client;
         CommandHandlingService _command;
         DatabaseInit dbClass = new DatabaseInit();
@@ -131,7 +127,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
             if (message.Source != MessageSource.User) return;
 
             var context = new SocketCommandContext(this._client, message);
-            bool check = _c.ReadChannel1337Listen(context);
+            var comHeader = new CommandsHeader(context.Client, new ContextInfo(context.Guild.Id, context.Channel.Id, context.User.Id));
+            bool check = comHeader.ReadChannel1337Listen();
             if (!check) return;
 
             // Get Time to Check if we are on right time and prepare the string for it
@@ -175,8 +172,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 //Check if it is the right time! 133700 - 133800 otherwise break
                 if (!(133700 <= timeNowAsInt && 133800 >= timeNowAsInt))
                 {
-                    if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                        " Nicht in der richtigen Zeit!", context);
+                    if (this._devMode) await comHeader.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
+                        " Nicht in der richtigen Zeit!");
                     LogMain("1 " + context.Guild.GetUser(message.Author.Id).Username + " Nicht in der richtigen Zeit!", LogLevel.Log);
                     return;
                 }
@@ -209,8 +206,8 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     dbTable.SubmitChanges();
                     // Counts User for bot respons
                     counterUserPerDay++;
-                    if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                        " Hab dich gezählt :P", context);
+                    if (this._devMode) await comHeader.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
+                        " Hab dich gezählt :P");
                     LogMain("2 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", LogLevel.Log);
                 }
                 else // Update user if allready exist
@@ -265,14 +262,14 @@ namespace Lilac_x3_Bot.ExtraFeatures
                         dbTable.SubmitChanges();
                         // Counts User for bot respons
                         counterUserPerDay++;
-                        if (_devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                            " Hab dich gezählt :P", context);
+                        if (_devMode) await comHeader.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
+                            " Hab dich gezählt :P");
                         LogMain("3 " + context.Guild.GetUser(message.Author.Id).Username + " Hab dich gezählt :P ", LogLevel.Log);
                     }
                     else
                     {
-                        if (this._devMode) await _c.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
-                            " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649>", context);
+                        if (this._devMode) await comHeader.SendTo1337ChannelAsync(context.Guild.GetUser(message.Author.Id).Mention +
+                            " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649>");
                         LogMain("4 " + context.Guild.GetUser(message.Author.Id).Username +
                             " Du wurdest heute schon gezählt. Schummeln gilt nicht!! <:pandabulle:327873024017563649> ", LogLevel.Log);
                     }
@@ -297,7 +294,7 @@ namespace Lilac_x3_Bot.ExtraFeatures
                 while (true)
                 {
                     #region send msg when event is over
-                    CommandHeader _c2 = new CommandHeader();
+                    CommandsHeader comHeader = new CommandsHeader();
                     SocketTextChannel textChannel;
 
                     // Get actual time and time for trigger
@@ -314,13 +311,13 @@ namespace Lilac_x3_Bot.ExtraFeatures
                     Thread.Sleep(iTriggerZeit);
 
                     // If 1337ChannelID is set
-                    if (_client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) != null)
+                    if (_client.GetChannel(comHeader.GetFeature1337ListenFromChannelID()) != null)
                     {
-                        textChannel = (SocketTextChannel)_client.GetChannel(_c2.GetFeature1337ListenFromChannelID());
+                        textChannel = (SocketTextChannel)_client.GetChannel(comHeader.GetFeature1337ListenFromChannelID());
                         await textChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <a:poggers:684767963156709376>");
                     }
                     // If Channel doesn't exist or 0
-                    else if (_c2.GetFeature1337ListenFromChannelID() == 0 || _client.GetChannel(_c2.GetFeature1337ListenFromChannelID()) == null)
+                    else if (comHeader.GetFeature1337ListenFromChannelID() == 0 || _client.GetChannel(comHeader.GetFeature1337ListenFromChannelID()) == null)
                     {
                         await _client.GetGuild(guild.Id).SystemChannel.SendMessageAsync("Yaay <a:lilacxYayHyperGif:772468799454052392> Dankeschön fürs mitmachen! <a:lilacxHappyGIF:708754770008997968> Heute wurden ganze " + counterUserPerDay + " Meowies um 1337 gezählt. <:Pog:655898145963900948>");
                     }
